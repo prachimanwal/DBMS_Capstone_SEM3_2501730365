@@ -1,0 +1,4960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayGuard 3NF — Integrated Payroll & Attendance System (Phases 1–5)</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --accent: #0f766e;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --purple: #6d28d9;
+      --purple-bg: #ede9fe;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.07), 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 48px;
+    }
+
+    /* Top Header */
+    .top-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      padding: 16px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #14b8a6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-title p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .header-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .control-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .control-pill label {
+      color: #cbd5e1;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .control-pill select {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .role-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .role-admin {
+      background: #10b981;
+      color: #052e16;
+    }
+
+    .role-emp {
+      background: #f59e0b;
+      color: #451a03;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* RBAC Banner */
+    .rbac-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .rbac-banner.emp-mode {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    }
+
+    .phase-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.08);
+      font-weight: 700;
+    }
+
+    .tab-btn.active .phase-tag {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 4px;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Cards & Grids */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 20px;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .badge-purple {
+      background: var(--purple-bg);
+      color: var(--purple);
+    }
+
+    /* Forms & Buttons */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      border-color: #cbd5e1;
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-sm {
+      padding: 4px 9px;
+      font-size: 11.5px;
+    }
+
+    /* Alert Toast / Result Box */
+    .result-box {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .result-box.ok {
+      display: block;
+      background: #ecfdf5;
+      border: 1px solid #6ee7b7;
+      color: #065f46;
+    }
+
+    .result-box.err {
+      display: block;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    /* Printable Corporate Salary Slip */
+    .payslip-sheet {
+      border: 2px solid #1e293b;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .payslip-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #1e293b;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .payslip-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .payslip-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+    }
+
+    .payslip-net-banner {
+      margin-top: 16px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 14px 20px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .schema-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .schema-pill {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header with Role Switcher & Period Filter -->
+  <header class="top-header">
+    <div class="brand-block">
+      <div class="brand-logo">PG</div>
+      <div class="brand-title">
+        <h1>PayGuard 3NF — Payroll & Attendance System</h1>
+        <p>Connected 5-Phase Relational DBMS Application (3NF Schema • Stored Procedures • Triggers • Indexes • RBAC & ACID)</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Period Filter -->
+      <div class="control-pill">
+        <label for="periodSelect">Payroll Period:</label>
+        <select id="periodSelect" onchange="changePeriod(this.value)">
+          <option value="10" selected>October 2026</option>
+          <option value="9" >September 2026</option>
+          <option value="8" >August 2026</option>
+          <option value="0" >All 3 Months (Aug–Oct 2026)</option>
+        </select>
+      </div>
+
+      <!-- Active User & Role Switcher (Phase 4 & 5 RBAC) -->
+      <div class="control-pill">
+        <label for="actorSelect">Active Session (RBAC):</label>
+        <select id="actorSelect" onchange="switchActor(this.value)">
+          
+          <option value="1" selected>
+            [HR_ADMIN] EMP001 — Aarav Mehta (HR Director)
+          </option>
+          
+          <option value="2" >
+            [HR_ADMIN] EMP002 — Neha Kulkarni (Senior HR Specialist)
+          </option>
+          
+          <option value="3" >
+            [EMPLOYEE] EMP003 — Rohan Verma (Principal Software Architect)
+          </option>
+          
+          <option value="4" >
+            [EMPLOYEE] EMP004 — Priya Nair (Senior Backend Engineer)
+          </option>
+          
+          <option value="5" >
+            [EMPLOYEE] EMP005 — Siddharth Iyer (Full-Stack Developer)
+          </option>
+          
+          <option value="6" >
+            [EMPLOYEE] EMP006 — Ananya Deshmukh (Frontend Engineer)
+          </option>
+          
+          <option value="7" >
+            [EMPLOYEE] EMP007 — Vikram Rathore (DevOps &amp; SRE Lead)
+          </option>
+          
+          <option value="8" >
+            [EMPLOYEE] EMP008 — Kavya Sharma (Finance Controller)
+          </option>
+          
+          <option value="9" >
+            [EMPLOYEE] EMP009 — Arjun Chatterjee (Payroll &amp; Tax Analyst)
+          </option>
+          
+          <option value="10" >
+            [EMPLOYEE] EMP010 — Meera Krishnan (Product Manager)
+          </option>
+          
+          <option value="11" >
+            [EMPLOYEE] EMP011 — Devansh Kapoor (Cloud Operations Engineer)
+          </option>
+          
+          <option value="12" >
+            [EMPLOYEE] EMP012 — Tanya Bhatia (QA Automation Engineer)
+          </option>
+          
+          <option value="13" >
+            [EMPLOYEE] EMP013 — Kabir Sen (Data Engineer)
+          </option>
+          
+        </select>
+        
+          <span class="role-badge role-admin">HR_ADMIN • Full Access</span>
+        
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- RBAC Context Banner -->
+    <div class="rbac-banner ">
+      <div>
+        <strong>Logged in as:</strong> <code>EMP001</code> Aarav Mehta
+        &nbsp;|&nbsp; <strong>Department:</strong> Human Resources &amp; People Ops
+        &nbsp;|&nbsp; <strong>DB Role Policy:</strong>
+        
+          <code>role_hr_admin</code> — Full CRUD + Stored Procedure Execution + Organization-Wide Reports
+        
+      </div>
+      <div class="schema-pills">
+        
+          <span class="schema-pill">Department: 4</span>
+        
+          <span class="schema-pill">Employee: 13</span>
+        
+          <span class="schema-pill">Salary_Structure: 13</span>
+        
+          <span class="schema-pill">Leave_Type: 4</span>
+        
+          <span class="schema-pill">Leave_Request: 20</span>
+        
+          <span class="schema-pill">Attendance: 780</span>
+        
+          <span class="schema-pill">Payroll: 36</span>
+        
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="openTab('tab-overview', this)">
+        <span class="phase-tag">P1 + P5</span> Overview & Employees
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-report-att', this)">
+        <span class="phase-tag">P3 Report 1</span> Monthly Attendance Summary
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-report-slip', this)">
+        <span class="phase-tag">P2 + P3 Report 2</span> Salary Slips & Payroll Engine
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-report-late', this)">
+        <span class="phase-tag">P3 Report 3</span> Late-Marks & Punctuality
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-att-leave', this)">
+        <span class="phase-tag">P2 + P4</span> Attendance & Leave Console (Triggers)
+      </button>
+      <button class="tab-btn" onclick="openTab('tab-diagnostics', this)">
+        <span class="phase-tag">P3 + P4</span> EXPLAIN Plan & 16-Case Test Suite
+      </button>
+    </nav>
+
+    <!-- ================================================================== -->
+    <!-- TAB 1: OVERVIEW, EMPLOYEE DIRECTORY & RBAC / TRANSACTION CONTROLS   -->
+    <!-- ================================================================== -->
+    <section id="tab-overview" class="tab-panel active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Visible Employees (RBAC)</div>
+          <div class="kpi-value">13</div>
+          <div class="kpi-sub">Across 4 Departments</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Gross Payroll (Oct 2026)</div>
+          <div class="kpi-value">₹1,505,850.01</div>
+          <div class="kpi-sub">Earned Gross after LOP Proration</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Net Payroll Disbursed</div>
+          <div class="kpi-value" style="color: var(--success);">₹1,289,627.86</div>
+          <div class="kpi-sub">TDS Deducted: ₹110,545.79</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Paid Attendance Rate</div>
+          <div class="kpi-value">99.6%</div>
+          <div class="kpi-sub">Late Arrivals Logged: 24</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Pending Leave Requests</div>
+          <div class="kpi-value" style="color: var(--warning);">2</div>
+          <div class="kpi-sub">Protected by Overlap & Quota Triggers</div>
+        </div>
+      </div>
+
+      
+      <div class="grid-2">
+        <!-- HR_ADMIN Action 1: Atomic Salary Revision + Payroll Recalculation -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Phase 4 Atomic Transaction: Revise Salary & Recalculate Payroll</div>
+              <div class="card-subtitle">Wraps <code>UPDATE Salary_Structure</code> + <code>sp_process_monthly_payroll</code> in <code>SAVEPOINT / COMMIT / ROLLBACK</code></div>
+            </div>
+            <span class="badge badge-purple">ACID Transaction</span>
+          </div>
+          <form onsubmit="submitSalaryUpdate(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Target Employee</label>
+                <select id="salEmpId" required>
+                  
+                  <option value="1" >
+                    EMP001 — Aarav Mehta (Basic: ₹95,000)
+                  </option>
+                  
+                  <option value="2" >
+                    EMP002 — Neha Kulkarni (Basic: ₹62,000)
+                  </option>
+                  
+                  <option value="3" selected>
+                    EMP003 — Rohan Verma (Basic: ₹115,000)
+                  </option>
+                  
+                  <option value="4" >
+                    EMP004 — Priya Nair (Basic: ₹82,000)
+                  </option>
+                  
+                  <option value="5" >
+                    EMP005 — Siddharth Iyer (Basic: ₹68,000)
+                  </option>
+                  
+                  <option value="6" >
+                    EMP006 — Ananya Deshmukh (Basic: ₹54,000)
+                  </option>
+                  
+                  <option value="7" >
+                    EMP007 — Vikram Rathore (Basic: ₹88,000)
+                  </option>
+                  
+                  <option value="8" >
+                    EMP008 — Kavya Sharma (Basic: ₹90,000)
+                  </option>
+                  
+                  <option value="9" >
+                    EMP009 — Arjun Chatterjee (Basic: ₹52,000)
+                  </option>
+                  
+                  <option value="10" >
+                    EMP010 — Meera Krishnan (Basic: ₹78,000)
+                  </option>
+                  
+                  <option value="11" >
+                    EMP011 — Devansh Kapoor (Basic: ₹48,000)
+                  </option>
+                  
+                  <option value="12" >
+                    EMP012 — Tanya Bhatia (Basic: ₹44,000)
+                  </option>
+                  
+                  <option value="13" >
+                    EMP013 — Kabir Sen (Basic: ₹72,000)
+                  </option>
+                  
+                </select>
+              </div>
+              <div class="form-group">
+                <label>New Basic Pay (₹)</label>
+                <input type="number" step="0.01" id="salBasic" value="120000" required />
+              </div>
+              <div class="form-group">
+                <label>Special Allowance (₹)</label>
+                <input type="number" step="0.01" id="salSpecial" value="28000" required />
+              </div>
+              <div class="form-group">
+                <label>Recalculate Period</label>
+                <select id="salRecalcMonth">
+                  <option value="10">October 2026 (Valid Commit)</option>
+                  <option value="9">September 2026 (Valid Commit)</option>
+                  <option value="8">August 2026 (Valid Commit)</option>
+                  <option value="13">Month 13 — Simulate Mid-Tx Failure & Rollback!</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary">Execute Atomic Transaction (COMMIT)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('salBasic').value='-15000';">
+                Preset Invalid: Negative Salary (-₹15,000)
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('salBasic').value='125000'; document.getElementById('salRecalcMonth').value='13';">
+                Preset Mid-Tx Failure (Test Rollback)
+              </button>
+            </div>
+          </form>
+          <div id="salTxResult" class="result-box"></div>
+        </div>
+
+        <!-- HR_ADMIN Action 2: Add Employee & 1:1 Salary Structure -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Onboard New Employee + 1:1 Salary Structure</div>
+              <div class="card-subtitle">Inserts into <code>Employee</code> and <code>Salary_Structure</code> atomically</div>
+            </div>
+            <span class="badge badge-success">HR_ADMIN Only</span>
+          </div>
+          <form onsubmit="submitCreateEmployee(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Employee Code</label>
+                <input type="text" id="newEmpCode" placeholder="EMP013" value="EMP013" required />
+              </div>
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="newFirstName" placeholder="Kabir" value="Kabir" required />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="newLastName" placeholder="Sen" value="Sen" required />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newEmail" placeholder="kabir.sen@acmecorp.in" value="kabir.sen@acmecorp.in" required />
+              </div>
+              <div class="form-group">
+                <label>Department</label>
+                <select id="newDeptId">
+                  
+                  <option value="1">HR — Human Resources &amp; People Ops</option>
+                  
+                  <option value="2">ENG — Core Software Engineering</option>
+                  
+                  <option value="3">FIN — Finance, Tax &amp; Compliance</option>
+                  
+                  <option value="4">OPS — Product &amp; Cloud Operations</option>
+                  
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Designation</label>
+                <input type="text" id="newDesignation" value="Data Engineer" required />
+              </div>
+              <div class="form-group">
+                <label>Basic Pay (₹)</label>
+                <input type="number" id="newBasicPay" value="72000" required />
+              </div>
+              <div class="form-group">
+                <label>Special Allowance (₹)</label>
+                <input type="number" id="newSpecial" value="14000" required />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Employee & Salary Structure</button>
+          </form>
+          <div id="createEmpResult" class="result-box"></div>
+        </div>
+      </div>
+      
+
+      <!-- Employee Directory & 3NF Salary Structure Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              
+                Organization Employee Directory & 3NF Contractual Salary Structure (13 Employees)
+              
+            </div>
+            <div class="card-subtitle">
+              Joins <code>Employee</code>, <code>Department</code>, and <code>Salary_Structure</code> + SQL function <code>fn_calculate_gross_salary()</code>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>RBAC Role</th>
+                <th class="num">Basic Pay</th>
+                <th class="num">HRA %</th>
+                <th class="num">DA %</th>
+                <th class="num">Special Allow.</th>
+                <th class="num">Contracted Gross</th>
+                <th class="num">PF %</th>
+                <th>Std Check-In</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">aarav.mehta@acmecorp.in</span></td>
+                <td>Human Resources &amp; People Ops<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>HR Director</td>
+                <td>
+                  
+                    <span class="badge badge-purple">HR_ADMIN</span>
+                  
+                </td>
+                <td class="num">₹95,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹22,000.00</td>
+                <td class="num"><strong>₹169,250.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">neha.kulkarni@acmecorp.in</span></td>
+                <td>Human Resources &amp; People Ops<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Senior HR Specialist</td>
+                <td>
+                  
+                    <span class="badge badge-purple">HR_ADMIN</span>
+                  
+                </td>
+                <td class="num">₹62,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹12,000.00</td>
+                <td class="num"><strong>₹108,100.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">rohan.verma@acmecorp.in</span></td>
+                <td>Core Software Engineering<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Principal Software Architect</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹115,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹28,000.00</td>
+                <td class="num"><strong>₹206,250.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">priya.nair@acmecorp.in</span></td>
+                <td>Core Software Engineering<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Senior Backend Engineer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹82,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹16,000.00</td>
+                <td class="num"><strong>₹143,100.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">siddharth.iyer@acmecorp.in</span></td>
+                <td>Core Software Engineering<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Full-Stack Developer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹68,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹11,500.00</td>
+                <td class="num"><strong>₹116,900.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">ananya.deshmukh@acmecorp.in</span></td>
+                <td>Core Software Engineering<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Frontend Engineer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹54,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹9,000.00</td>
+                <td class="num"><strong>₹92,700.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">vikram.rathore@acmecorp.in</span></td>
+                <td>Product &amp; Cloud Operations<br/><span style="font-size:11px;color:var(--text-muted);">Hyderabad Tech Park</span></td>
+                <td>DevOps &amp; SRE Lead</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹88,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹18,500.00</td>
+                <td class="num"><strong>₹154,900.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">kavya.sharma@acmecorp.in</span></td>
+                <td>Finance, Tax &amp; Compliance<br/><span style="font-size:11px;color:var(--text-muted);">Mumbai Financial Center</span></td>
+                <td>Finance Controller</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹90,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹20,000.00</td>
+                <td class="num"><strong>₹159,500.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">arjun.chatterjee@acmecorp.in</span></td>
+                <td>Finance, Tax &amp; Compliance<br/><span style="font-size:11px;color:var(--text-muted);">Mumbai Financial Center</span></td>
+                <td>Payroll &amp; Tax Analyst</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹52,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹8,500.00</td>
+                <td class="num"><strong>₹89,100.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">meera.krishnan@acmecorp.in</span></td>
+                <td>Product &amp; Cloud Operations<br/><span style="font-size:11px;color:var(--text-muted);">Hyderabad Tech Park</span></td>
+                <td>Product Manager</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹78,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹15,000.00</td>
+                <td class="num"><strong>₹135,900.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">devansh.kapoor@acmecorp.in</span></td>
+                <td>Product &amp; Cloud Operations<br/><span style="font-size:11px;color:var(--text-muted);">Hyderabad Tech Park</span></td>
+                <td>Cloud Operations Engineer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹48,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹7,500.00</td>
+                <td class="num"><strong>₹81,900.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">tanya.bhatia@acmecorp.in</span></td>
+                <td>Core Software Engineering<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>QA Automation Engineer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹44,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹6,500.00</td>
+                <td class="num"><strong>₹74,700.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+              <tr>
+                <td><code>EMP013</code></td>
+                <td><strong>Kabir Sen</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">kabir.sen@acmecorp.in</span></td>
+                <td>Human Resources &amp; People Ops<br/><span style="font-size:11px;color:var(--text-muted);">Bengaluru HQ</span></td>
+                <td>Data Engineer</td>
+                <td>
+                  
+                    <span class="badge badge-success">EMPLOYEE</span>
+                  
+                </td>
+                <td class="num">₹72,000.00</td>
+                <td class="num">40%</td>
+                <td class="num">15%</td>
+                <td class="num">₹14,000.00</td>
+                <td class="num"><strong>₹125,600.00</strong></td>
+                <td class="num">12%</td>
+                <td><code>09:15:00</code></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 2: PHASE 3 — REPORT 1: MONTHLY ATTENDANCE SUMMARY              -->
+    <!-- ================================================================== -->
+    <section id="tab-report-att" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Phase 3 — Report 1: Monthly Attendance Summary Report</div>
+            <div class="card-subtitle">
+              Source View: <code>v_monthly_attendance_summary</code> • Optimized by Composite Covering Index <code>idx_attendance_emp_date_late</code>
+            </div>
+          </div>
+          <span class="badge badge-success">12 Summary Rows</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th class="num">Working Days</th>
+                <th class="num">Full Present</th>
+                <th class="num">Half Days</th>
+                <th class="num">Approved Leave</th>
+                <th class="num">Unpaid Absent</th>
+                <th class="num">Effective Present</th>
+                <th class="num">Late Marks</th>
+                <th class="num">Total Hours</th>
+                <th class="num">Avg Hours/Day</th>
+                <th class="num">Paid Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>Human Resources &amp; People Ops</td>
+                <td class="num">22</td>
+                <td class="num">20</td>
+                <td class="num">0</td>
+                <td class="num">2</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>20.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">0</span>
+                  
+                </td>
+                <td class="num">186.9h</td>
+                <td class="num">9.34h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>Human Resources &amp; People Ops</td>
+                <td class="num">22</td>
+                <td class="num">22</td>
+                <td class="num">0</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>22.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">0</span>
+                  
+                </td>
+                <td class="num">207.0h</td>
+                <td class="num">9.41h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>Core Software Engineering</td>
+                <td class="num">22</td>
+                <td class="num">22</td>
+                <td class="num">0</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>22.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-warning">2</span>
+                  
+                </td>
+                <td class="num">205.1h</td>
+                <td class="num">9.32h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>Core Software Engineering</td>
+                <td class="num">22</td>
+                <td class="num">20</td>
+                <td class="num">0</td>
+                <td class="num">2</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>20.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">0</span>
+                  
+                </td>
+                <td class="num">189.0h</td>
+                <td class="num">9.45h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>Core Software Engineering</td>
+                <td class="num">22</td>
+                <td class="num">20</td>
+                <td class="num">0</td>
+                <td class="num">2</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>20.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">4</span>
+                  
+                </td>
+                <td class="num">187.2h</td>
+                <td class="num">9.36h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>Core Software Engineering</td>
+                <td class="num">22</td>
+                <td class="num">22</td>
+                <td class="num">0</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>22.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-warning">2</span>
+                  
+                </td>
+                <td class="num">206.6h</td>
+                <td class="num">9.39h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td class="num">22</td>
+                <td class="num">21</td>
+                <td class="num">0</td>
+                <td class="num">1</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>21.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">6</span>
+                  
+                </td>
+                <td class="num">193.0h</td>
+                <td class="num">9.19h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>Finance, Tax &amp; Compliance</td>
+                <td class="num">22</td>
+                <td class="num">22</td>
+                <td class="num">0</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>22.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">0</span>
+                  
+                </td>
+                <td class="num">205.6h</td>
+                <td class="num">9.35h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>Finance, Tax &amp; Compliance</td>
+                <td class="num">22</td>
+                <td class="num">21</td>
+                <td class="num">1</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>21.5</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">3</span>
+                  
+                </td>
+                <td class="num">200.3h</td>
+                <td class="num">9.11h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-warning">97.73%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td class="num">22</td>
+                <td class="num">22</td>
+                <td class="num">0</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>22.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-warning">1</span>
+                  
+                </td>
+                <td class="num">207.9h</td>
+                <td class="num">9.45h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td class="num">22</td>
+                <td class="num">20</td>
+                <td class="num">0</td>
+                <td class="num">2</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>20.0</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">3</span>
+                  
+                </td>
+                <td class="num">187.4h</td>
+                <td class="num">9.37h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-success">100.0%</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>Core Software Engineering</td>
+                <td class="num">22</td>
+                <td class="num">21</td>
+                <td class="num">1</td>
+                <td class="num">0</td>
+                <td class="num">
+                  
+                    0
+                  
+                </td>
+                <td class="num"><strong>21.5</strong></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">3</span>
+                  
+                </td>
+                <td class="num">201.1h</td>
+                <td class="num">9.14h</td>
+                <td class="num">
+                  
+                    <span class="badge badge-warning">97.73%</span>
+                  
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 3: PHASE 3 — REPORT 2: SALARY SLIP & PAYROLL ENGINE            -->
+    <!-- ================================================================== -->
+    <section id="tab-report-slip" class="tab-panel">
+      
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Phase 2 Stored Procedure Runner: <code>sp_process_bulk_payroll(p_month, p_year)</code></div>
+            <div class="card-subtitle">
+              Computes attendance proration, paid vs unpaid leaves, late LOP penalty, PF, PT, and slab-based TDS (<code>fn_calculate_income_tax</code>)
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <select id="runPayMonth" style="padding:7px 10px;border-radius:6px;border:1px solid #cbd5e1;">
+              <option value="10" selected>October 2026</option>
+              <option value="9" >September 2026</option>
+              <option value="8" >August 2026</option>
+            </select>
+            <button class="btn btn-primary" onclick="runBulkPayroll()">
+              Run Monthly Payroll Engine (All Active Employees)
+            </button>
+          </div>
+        </div>
+        <div id="runPayrollResult" class="result-box"></div>
+      </div>
+      
+
+      <!-- Featured Itemized Printable Salary Slip -->
+      
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Phase 3 — Report 2: Official Itemized Employee Salary Slip</div>
+            <div class="card-subtitle">Source View: <code>v_employee_salary_slip</code> • Optimized by Index <code>idx_payroll_period_emp</code></div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            
+            <label style="font-size:12.5px;font-weight:600;">Select Employee Slip:</label>
+            <select onchange="changeSlipEmployee(this.value)" style="padding:6px 10px;border-radius:6px;border:1px solid #cbd5e1;">
+              
+              <option value="1" >
+                EMP001 — Aarav Mehta
+              </option>
+              
+              <option value="2" >
+                EMP002 — Neha Kulkarni
+              </option>
+              
+              <option value="3" selected>
+                EMP003 — Rohan Verma
+              </option>
+              
+              <option value="4" >
+                EMP004 — Priya Nair
+              </option>
+              
+              <option value="5" >
+                EMP005 — Siddharth Iyer
+              </option>
+              
+              <option value="6" >
+                EMP006 — Ananya Deshmukh
+              </option>
+              
+              <option value="7" >
+                EMP007 — Vikram Rathore
+              </option>
+              
+              <option value="8" >
+                EMP008 — Kavya Sharma
+              </option>
+              
+              <option value="9" >
+                EMP009 — Arjun Chatterjee
+              </option>
+              
+              <option value="10" >
+                EMP010 — Meera Krishnan
+              </option>
+              
+              <option value="11" >
+                EMP011 — Devansh Kapoor
+              </option>
+              
+              <option value="12" >
+                EMP012 — Tanya Bhatia
+              </option>
+              
+              <option value="13" >
+                EMP013 — Kabir Sen
+              </option>
+              
+            </select>
+            
+            <button class="btn btn-outline btn-sm" onclick="window.print()">Print / Save PDF</button>
+          </div>
+        </div>
+
+        <div class="payslip-sheet">
+          <div class="payslip-top">
+            <div>
+              <h2 style="font-size:18px;font-weight:800;">ACME ENTERPRISE TECHNOLOGIES PVT. LTD.</h2>
+              <p style="font-size:12.5px;color:var(--text-muted);">
+                Statutory Monthly Payslip • Generated via Phase 2 Stored Procedure <code>sp_process_monthly_payroll</code>
+              </p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:15px;font-weight:800;color:var(--primary);">PAY PERIOD: 2026-10</div>
+              <span class="badge badge-success">PROCESSED</span>
+            </div>
+          </div>
+
+          <div class="payslip-meta-grid">
+            <div><strong>Employee Code:</strong> <code>EMP003</code></div>
+            <div><strong>Employee Name:</strong> Rohan Verma</div>
+            <div><strong>Department:</strong> Core Software Engineering</div>
+            <div><strong>Designation:</strong> Principal Software Architect</div>
+            <div><strong>Working Days:</strong> 22 days</div>
+            <div><strong>Present / Paid Leave:</strong> 22d / 0d</div>
+            <div><strong>Late Arrivals:</strong> 2 (Penalty: 0d LOP)</div>
+            <div><strong>Total LOP Days:</strong> <strong style="color:var(--danger);">0 days</strong></div>
+          </div>
+
+          <div class="payslip-columns">
+            <!-- Earnings Table -->
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Earnings Component</th>
+                    <th class="num">Contracted (₹)</th>
+                    <th class="num">Earned (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Basic Pay</td>
+                    <td class="num">₹115,000.00</td>
+                    <td class="num"><strong>₹115,000.00</strong></td>
+                  </tr>
+                  <tr>
+                    <td>House Rent Allowance (HRA 40%)</td>
+                    <td class="num">₹46,000.00</td>
+                    <td class="num">₹46,000.00</td>
+                  </tr>
+                  <tr>
+                    <td>Dearness Allowance (DA 15%)</td>
+                    <td class="num">₹17,250.00</td>
+                    <td class="num">₹17,250.00</td>
+                  </tr>
+                  <tr>
+                    <td>Special Allowance</td>
+                    <td class="num">₹28,000.00</td>
+                    <td class="num">₹28,000.00</td>
+                  </tr>
+                  <tr style="background:#f8fafc;font-weight:700;">
+                    <td>Gross Earnings</td>
+                    <td class="num">₹206,250.00</td>
+                    <td class="num" style="color:var(--primary);">₹206,250.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Deductions Table -->
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Statutory & Attendance Deductions</th>
+                    <th class="num">Amount (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Provident Fund (EPF @ 12% of Earned Basic)</td>
+                    <td class="num">₹13,800.00</td>
+                  </tr>
+                  <tr>
+                    <td>Professional Tax (Statutory State PT)</td>
+                    <td class="num">₹200.00</td>
+                  </tr>
+                  <tr>
+                    <td>Income Tax / TDS (<code>fn_calculate_income_tax</code>)</td>
+                    <td class="num">₹24,266.67</td>
+                  </tr>
+                  <tr>
+                    <td>Loss of Pay (LOP) Deduction (0 days)</td>
+                    <td class="num" style="color:var(--danger);">₹0.00</td>
+                  </tr>
+                  <tr style="background:#f8fafc;font-weight:700;">
+                    <td>Total Deductions (Statutory + LOP)</td>
+                    <td class="num" style="color:var(--danger);">₹38,266.67</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="payslip-net-banner">
+            <span>NET SALARY PAYABLE (Earned Gross − Statutory Deductions)</span>
+            <span style="font-size:22px;color:#4ade80;">₹167,983.33</span>
+          </div>
+        </div>
+      </div>
+      
+
+      <!-- Full Salary Slips Register Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Monthly Payroll Register (12 Records)</div>
+            <div class="card-subtitle">Click any row's "View Slip" button to inspect its itemized payslip above</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th class="num">Work Days</th>
+                <th class="num">LOP Days</th>
+                <th class="num">Late Count</th>
+                <th class="num">Contracted Gross</th>
+                <th class="num">Earned Gross</th>
+                <th class="num">PF (12%)</th>
+                <th class="num">TDS (Tax)</th>
+                <th class="num">LOP Ded.</th>
+                <th class="num">Net Salary</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">0</td>
+                <td class="num">₹169,250.00</td>
+                <td class="num">₹169,250.00</td>
+                <td class="num">₹11,400.00</td>
+                <td class="num">₹16,570.67</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹141,079.33</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(1, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">0</td>
+                <td class="num">₹108,100.00</td>
+                <td class="num">₹108,100.00</td>
+                <td class="num">₹7,440.00</td>
+                <td class="num">₹5,488.60</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹94,971.40</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(2, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">2</td>
+                <td class="num">₹206,250.00</td>
+                <td class="num">₹206,250.00</td>
+                <td class="num">₹13,800.00</td>
+                <td class="num">₹24,266.67</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹167,983.33</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(3, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">0</td>
+                <td class="num">₹143,100.00</td>
+                <td class="num">₹143,100.00</td>
+                <td class="num">₹9,840.00</td>
+                <td class="num">₹11,131.47</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹121,928.53</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(4, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">0.5d</span>
+                  
+                </td>
+                <td class="num">4</td>
+                <td class="num">₹116,900.00</td>
+                <td class="num">₹114,243.19</td>
+                <td class="num">₹7,974.55</td>
+                <td class="num">₹6,446.94</td>
+                <td class="num">₹2,656.82</td>
+                <td class="num"><strong style="color:var(--success);">₹99,621.70</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(5, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">2</td>
+                <td class="num">₹92,700.00</td>
+                <td class="num">₹92,700.00</td>
+                <td class="num">₹6,480.00</td>
+                <td class="num">₹3,790.80</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹82,229.20</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(6, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">1d</span>
+                  
+                </td>
+                <td class="num">6</td>
+                <td class="num">₹154,900.00</td>
+                <td class="num">₹147,859.09</td>
+                <td class="num">₹10,080.00</td>
+                <td class="num">₹12,121.36</td>
+                <td class="num">₹7,040.91</td>
+                <td class="num"><strong style="color:var(--success);">₹125,457.73</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(7, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">0</td>
+                <td class="num">₹159,500.00</td>
+                <td class="num">₹159,500.00</td>
+                <td class="num">₹10,800.00</td>
+                <td class="num">₹14,542.67</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹133,957.33</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(8, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">1d</span>
+                  
+                </td>
+                <td class="num">3</td>
+                <td class="num">₹89,100.00</td>
+                <td class="num">₹85,050.00</td>
+                <td class="num">₹5,956.36</td>
+                <td class="num">₹2,995.20</td>
+                <td class="num">₹4,050.00</td>
+                <td class="num"><strong style="color:var(--success);">₹75,898.44</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(9, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    0.0d
+                  
+                </td>
+                <td class="num">1</td>
+                <td class="num">₹135,900.00</td>
+                <td class="num">₹135,900.00</td>
+                <td class="num">₹9,360.00</td>
+                <td class="num">₹9,825.40</td>
+                <td class="num">₹0.00</td>
+                <td class="num"><strong style="color:var(--success);">₹116,514.60</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(10, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">2.5d</span>
+                  
+                </td>
+                <td class="num">3</td>
+                <td class="num">₹81,900.00</td>
+                <td class="num">₹72,593.18</td>
+                <td class="num">₹5,105.45</td>
+                <td class="num">₹1,716.51</td>
+                <td class="num">₹9,306.82</td>
+                <td class="num"><strong style="color:var(--success);">₹65,571.22</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(11, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td class="num">22</td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">1d</span>
+                  
+                </td>
+                <td class="num">3</td>
+                <td class="num">₹74,700.00</td>
+                <td class="num">₹71,304.55</td>
+                <td class="num">₹5,040.00</td>
+                <td class="num">₹1,649.50</td>
+                <td class="num">₹3,395.45</td>
+                <td class="num"><strong style="color:var(--success);">₹64,415.05</strong></td>
+                <td><span class="badge badge-success">PROCESSED</span></td>
+                <td>
+                  <button class="btn btn-outline btn-sm" onclick="changeSlipEmployee(12, 10)">
+                    View Slip
+                  </button>
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 4: PHASE 3 — REPORT 3: LATE-MARKS & PUNCTUALITY REPORT         -->
+    <!-- ================================================================== -->
+    <section id="tab-report-late" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Phase 3 — Report 3: Late-Marks & Punctuality Disciplinary Report</div>
+            <div class="card-subtitle">
+              Source View: <code>v_late_marks_report</code> • Standard Check-In Threshold: <code>09:15:00</code> •
+              Policy: Every 3 late marks in a month = <code>0.5 day LOP deduction</code>
+            </div>
+          </div>
+          <span class="badge badge-purple">Index: idx_attendance_date_late_emp</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Std Check-In</th>
+                <th class="num">Late Days Count</th>
+                <th class="num">Total Late Mins</th>
+                <th class="num">Avg Late Mins</th>
+                <th class="num">Max Late Mins</th>
+                <th>Latest Check-In</th>
+                <th class="num">LOP Penalty Days</th>
+                <th>Punctuality Tier</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>6</strong></td>
+                <td class="num">180 mins</td>
+                <td class="num">30.0 mins</td>
+                <td class="num">50 mins</td>
+                <td><code>10:05:00</code></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">1.0 days LOP</span>
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-danger">PENALTY APPLIED (3+ Late -&gt; LOP)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>Core Software Engineering</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>4</strong></td>
+                <td class="num">96 mins</td>
+                <td class="num">24.0 mins</td>
+                <td class="num">35 mins</td>
+                <td><code>09:50:00</code></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">0.5 days LOP</span>
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-danger">PENALTY APPLIED (3+ Late -&gt; LOP)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>3</strong></td>
+                <td class="num">73 mins</td>
+                <td class="num">24.3 mins</td>
+                <td class="num">37 mins</td>
+                <td><code>09:52:00</code></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">0.5 days LOP</span>
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-danger">PENALTY APPLIED (3+ Late -&gt; LOP)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>Core Software Engineering</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>3</strong></td>
+                <td class="num">65 mins</td>
+                <td class="num">21.7 mins</td>
+                <td class="num">29 mins</td>
+                <td><code>09:44:00</code></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">0.5 days LOP</span>
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-danger">PENALTY APPLIED (3+ Late -&gt; LOP)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>Finance, Tax &amp; Compliance</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>3</strong></td>
+                <td class="num">62 mins</td>
+                <td class="num">20.7 mins</td>
+                <td class="num">33 mins</td>
+                <td><code>09:48:00</code></td>
+                <td class="num">
+                  
+                    <span class="badge badge-danger">0.5 days LOP</span>
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-danger">PENALTY APPLIED (3+ Late -&gt; LOP)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>Core Software Engineering</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td class="num">32 mins</td>
+                <td class="num">16.0 mins</td>
+                <td class="num">19 mins</td>
+                <td><code>09:34:00</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-warning">WARNING (1-2 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>Core Software Engineering</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td class="num">23 mins</td>
+                <td class="num">11.5 mins</td>
+                <td class="num">16 mins</td>
+                <td><code>09:31:00</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-warning">WARNING (1-2 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>Product &amp; Cloud Operations</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td class="num">10 mins</td>
+                <td class="num">10.0 mins</td>
+                <td class="num">10 mins</td>
+                <td><code>09:25:00</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-warning">WARNING (1-2 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>Human Resources &amp; People Ops</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>0</strong></td>
+                <td class="num">0 mins</td>
+                <td class="num">0.0 mins</td>
+                <td class="num">0 mins</td>
+                <td><code>-</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-success">EXCELLENT (0 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>Human Resources &amp; People Ops</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>0</strong></td>
+                <td class="num">0 mins</td>
+                <td class="num">0.0 mins</td>
+                <td class="num">0 mins</td>
+                <td><code>-</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-success">EXCELLENT (0 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>Core Software Engineering</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>0</strong></td>
+                <td class="num">0 mins</td>
+                <td class="num">0.0 mins</td>
+                <td class="num">0 mins</td>
+                <td><code>-</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-success">EXCELLENT (0 Late)</span>
+                  
+                </td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>Finance, Tax &amp; Compliance</td>
+                <td><code>09:15:00</code></td>
+                <td class="num"><strong>0</strong></td>
+                <td class="num">0 mins</td>
+                <td class="num">0.0 mins</td>
+                <td class="num">0 mins</td>
+                <td><code>-</code></td>
+                <td class="num">
+                  
+                    0.0 days
+                  
+                </td>
+                <td>
+                  
+                    <span class="badge badge-success">EXCELLENT (0 Late)</span>
+                  
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 5: PHASE 2 & 4 — ATTENDANCE & LEAVE CONSOLE (TRIGGERS)         -->
+    <!-- ================================================================== -->
+    <section id="tab-att-leave" class="tab-panel">
+      <div class="grid-2">
+        <!-- Leave Request Form (Available to Self or HR_ADMIN) -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Submit Leave Request (Protected by Phase 2 Overlap & Quota Triggers)</div>
+              <div class="card-subtitle">
+                Triggers: <code>trg_validate_leave_overlap_insert</code> & <code>trg_validate_leave_quota_insert</code>
+              </div>
+            </div>
+          </div>
+          <form onsubmit="submitLeaveRequest(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Employee</label>
+                <select id="leaveEmpId" >
+                  
+                  <option value="1" selected>
+                    EMP001 — Aarav Mehta
+                  </option>
+                  
+                  <option value="2" >
+                    EMP002 — Neha Kulkarni
+                  </option>
+                  
+                  <option value="3" >
+                    EMP003 — Rohan Verma
+                  </option>
+                  
+                  <option value="4" >
+                    EMP004 — Priya Nair
+                  </option>
+                  
+                  <option value="5" >
+                    EMP005 — Siddharth Iyer
+                  </option>
+                  
+                  <option value="6" >
+                    EMP006 — Ananya Deshmukh
+                  </option>
+                  
+                  <option value="7" >
+                    EMP007 — Vikram Rathore
+                  </option>
+                  
+                  <option value="8" >
+                    EMP008 — Kavya Sharma
+                  </option>
+                  
+                  <option value="9" >
+                    EMP009 — Arjun Chatterjee
+                  </option>
+                  
+                  <option value="10" >
+                    EMP010 — Meera Krishnan
+                  </option>
+                  
+                  <option value="11" >
+                    EMP011 — Devansh Kapoor
+                  </option>
+                  
+                  <option value="12" >
+                    EMP012 — Tanya Bhatia
+                  </option>
+                  
+                  <option value="13" >
+                    EMP013 — Kabir Sen
+                  </option>
+                  
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Leave Type</label>
+                <select id="leaveTypeId">
+                  
+                  <option value="1">
+                    CL — Casual Leave (Quota: 12d, Paid)
+                  </option>
+                  
+                  <option value="2">
+                    SL — Sick / Medical Leave (Quota: 10d, Paid)
+                  </option>
+                  
+                  <option value="3">
+                    EL — Earned Privilege Leave (Quota: 15d, Paid)
+                  </option>
+                  
+                  <option value="4">
+                    LOP — Loss of Pay (Unpaid Leave) (Quota: 30d, Unpaid LOP)
+                  </option>
+                  
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" id="leaveStart" value="2026-11-25" required />
+              </div>
+              <div class="form-group">
+                <label>End Date</label>
+                <input type="date" id="leaveEnd" value="2026-11-26" required />
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>Reason for Leave</label>
+              <input type="text" id="leaveReason" value="Family medical appointment" required />
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary">Submit Leave Request</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="presetOverlappingLeave()">
+                Test Trigger: Overlapping Approved Leave Date!
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="presetQuotaExceededLeave()">
+                Test Trigger: Exceed Annual Quota (15d Sick Leave)!
+              </button>
+            </div>
+          </form>
+          <div id="leaveSubmitResult" class="result-box"></div>
+        </div>
+
+        <!-- Daily Attendance Entry (HR_ADMIN) -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Log Daily Attendance (Trigger Auto-Computes Late Mins & Work Hours)</div>
+              <div class="card-subtitle">
+                Triggers: <code>trg_validate_attendance_before_insert</code> & <code>trg_compute_attendance_metrics_insert</code>
+              </div>
+            </div>
+            <span class="badge badge-purple">HR_ADMIN</span>
+          </div>
+          <form onsubmit="submitAttendance(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Employee</label>
+                <select id="attEmpId">
+                  
+                  <option value="1" >
+                    EMP001 — Aarav Mehta
+                  </option>
+                  
+                  <option value="2" >
+                    EMP002 — Neha Kulkarni
+                  </option>
+                  
+                  <option value="3" selected>
+                    EMP003 — Rohan Verma
+                  </option>
+                  
+                  <option value="4" >
+                    EMP004 — Priya Nair
+                  </option>
+                  
+                  <option value="5" >
+                    EMP005 — Siddharth Iyer
+                  </option>
+                  
+                  <option value="6" >
+                    EMP006 — Ananya Deshmukh
+                  </option>
+                  
+                  <option value="7" >
+                    EMP007 — Vikram Rathore
+                  </option>
+                  
+                  <option value="8" >
+                    EMP008 — Kavya Sharma
+                  </option>
+                  
+                  <option value="9" >
+                    EMP009 — Arjun Chatterjee
+                  </option>
+                  
+                  <option value="10" >
+                    EMP010 — Meera Krishnan
+                  </option>
+                  
+                  <option value="11" >
+                    EMP011 — Devansh Kapoor
+                  </option>
+                  
+                  <option value="12" >
+                    EMP012 — Tanya Bhatia
+                  </option>
+                  
+                  <option value="13" >
+                    EMP013 — Kabir Sen
+                  </option>
+                  
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Attendance Date</label>
+                <input type="date" id="attDate" value="2026-11-09" required />
+              </div>
+              <div class="form-group">
+                <label>Status</label>
+                <select id="attStatus">
+                  <option value="PRESENT">PRESENT</option>
+                  <option value="HALF_DAY">HALF_DAY</option>
+                  <option value="ABSENT">ABSENT</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Check-In (Std: 09:15:00)</label>
+                <input type="time" step="1" id="attCheckIn" value="09:32:00" />
+              </div>
+              <div class="form-group">
+                <label>Check-Out</label>
+                <input type="time" step="1" id="attCheckOut" value="18:32:00" />
+              </div>
+              <div class="form-group">
+                <label>Remarks</label>
+                <input type="text" id="attRemarks" value="Biometric gate entry" />
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary">Record Attendance</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="presetAttendanceOnLeave()">
+                Test Trigger: Mark PRESENT on Approved Leave (2026-08-10)!
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="presetInvalidCheckOut()">
+                Test Trigger: Check-Out (09:00) &lt; Check-In (14:00)!
+              </button>
+            </div>
+          </form>
+          <div id="attSubmitResult" class="result-box"></div>
+        </div>
+      </div>
+
+      <!-- Leave Requests Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Leave Requests Register (20 Requests)</div>
+            <div class="card-subtitle">Approving a leave atomically updates corresponding <code>Attendance</code> rows to <code>ON_LEAVE</code></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th>Leave Type</th>
+                <th>Paid?</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th class="num">Days</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Approved By</th>
+                <th>HR Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>#20</td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-11-23</code></td>
+                <td><code>2026-11-24</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Personal travel</td>
+                <td>
+                  
+                    <span class="badge badge-warning">PENDING</span>
+                  
+                </td>
+                <td>-</td>
+                
+                <td>
+                  
+                    <button class="btn btn-success btn-sm" onclick="decideLeave(20, 'APPROVED')">Approve</button>
+                    <button class="btn btn-danger btn-sm" onclick="decideLeave(20, 'REJECTED')">Reject</button>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#19</td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>EL (Earned Privilege Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-11-18</code></td>
+                <td><code>2026-11-20</code></td>
+                <td class="num"><strong>3</strong></td>
+                <td>Attending family wedding in Jaipur</td>
+                <td>
+                  
+                    <span class="badge badge-warning">PENDING</span>
+                  
+                </td>
+                <td>-</td>
+                
+                <td>
+                  
+                    <button class="btn btn-success btn-sm" onclick="decideLeave(19, 'APPROVED')">Approve</button>
+                    <button class="btn btn-danger btn-sm" onclick="decideLeave(19, 'REJECTED')">Reject</button>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#17</td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-10-22</code></td>
+                <td><code>2026-10-22</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td>Property registration</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#16</td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>SL (Sick / Medical Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-10-19</code></td>
+                <td><code>2026-10-20</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Seasonal flu recovery</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#18</td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>LOP (Loss of Pay (Unpaid Leave))</td>
+                <td>
+                  
+                    <span class="badge badge-warning">UNPAID LOP</span>
+                  
+                </td>
+                <td><code>2026-10-15</code></td>
+                <td><code>2026-10-16</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Unpaid personal errand</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#14</td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>EL (Earned Privilege Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-10-12</code></td>
+                <td><code>2026-10-13</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Personal festive break</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#15</td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-10-08</code></td>
+                <td><code>2026-10-09</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Hometown visit</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#12</td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>LOP (Loss of Pay (Unpaid Leave))</td>
+                <td>
+                  
+                    <span class="badge badge-warning">UNPAID LOP</span>
+                  
+                </td>
+                <td><code>2026-09-28</code></td>
+                <td><code>2026-09-29</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Unpaid personal leave for exam</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#11</td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-25</code></td>
+                <td><code>2026-09-25</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td>Parent health checkup</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#9</td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-21</code></td>
+                <td><code>2026-09-22</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Sister wedding ceremony</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#8</td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>SL (Sick / Medical Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-16</code></td>
+                <td><code>2026-09-16</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td>Migraine and medical checkup</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#13</td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>EL (Earned Privilege Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-14</code></td>
+                <td><code>2026-09-18</code></td>
+                <td class="num"><strong>5</strong></td>
+                <td>Peak release week vacation request</td>
+                <td>
+                  
+                    <span class="badge badge-danger">REJECTED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#10</td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>EL (Earned Privilege Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-10</code></td>
+                <td><code>2026-09-11</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Home relocation</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#7</td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>EL (Earned Privilege Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-09-07</code></td>
+                <td><code>2026-09-08</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Annual family trip</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#4</td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>LOP (Loss of Pay (Unpaid Leave))</td>
+                <td>
+                  
+                    <span class="badge badge-warning">UNPAID LOP</span>
+                  
+                </td>
+                <td><code>2026-08-27</code></td>
+                <td><code>2026-08-28</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Extended personal travel (Unpaid LOP)</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#3</td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-08-24</code></td>
+                <td><code>2026-08-24</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td>Personal bank documentation</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#2</td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>SL (Sick / Medical Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-08-18</code></td>
+                <td><code>2026-08-19</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Viral fever and medical rest</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#5</td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>SL (Sick / Medical Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-08-13</code></td>
+                <td><code>2026-08-14</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Dental surgery recovery</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#1</td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-08-10</code></td>
+                <td><code>2026-08-11</code></td>
+                <td class="num"><strong>2</strong></td>
+                <td>Family function in Pune</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Aarav Mehta</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+              <tr>
+                <td>#6</td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>CL (Casual Leave)</td>
+                <td>
+                  
+                    <span class="badge badge-success">PAID</span>
+                  
+                </td>
+                <td><code>2026-08-06</code></td>
+                <td><code>2026-08-06</code></td>
+                <td class="num"><strong>1</strong></td>
+                <td>Passport renewal appointment</td>
+                <td>
+                  
+                    <span class="badge badge-success">APPROVED</span>
+                  
+                </td>
+                <td>Neha Kulkarni</td>
+                
+                <td>
+                  
+                    <span style="font-size:11.5px;color:var(--text-muted);">Finalized</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Granular Attendance Logs -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Recent Daily Attendance Logs (Showing Top 60 Records)</div>
+            <div class="card-subtitle">Demonstrates trigger-computed <code>work_hours</code>, <code>late_minutes</code>, and <code>is_late</code></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Emp Code</th>
+                <th>Employee Name</th>
+                <th>Status</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th class="num">Work Hours</th>
+                <th class="num">Late Minutes</th>
+                <th>Late Flag</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:10:00</code></td>
+                <td><code>18:18:00</code></td>
+                <td class="num">9.13h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:53:00</code></td>
+                <td><code>18:19:00</code></td>
+                <td class="num">9.43h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:56:00</code></td>
+                <td><code>18:20:00</code></td>
+                <td class="num">9.4h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:59:00</code></td>
+                <td><code>18:21:00</code></td>
+                <td class="num">9.37h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:02:00</code></td>
+                <td><code>18:22:00</code></td>
+                <td class="num">9.33h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:05:00</code></td>
+                <td><code>18:23:00</code></td>
+                <td class="num">9.3h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:08:00</code></td>
+                <td><code>18:24:00</code></td>
+                <td class="num">9.27h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:11:00</code></td>
+                <td><code>18:25:00</code></td>
+                <td class="num">9.23h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:54:00</code></td>
+                <td><code>18:26:00</code></td>
+                <td class="num">9.53h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:57:00</code></td>
+                <td><code>18:27:00</code></td>
+                <td class="num">9.5h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:00:00</code></td>
+                <td><code>18:28:00</code></td>
+                <td class="num">9.47h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-30</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:03:00</code></td>
+                <td><code>18:29:00</code></td>
+                <td class="num">9.43h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:05:00</code></td>
+                <td><code>18:11:00</code></td>
+                <td class="num">9.1h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:08:00</code></td>
+                <td><code>18:12:00</code></td>
+                <td class="num">9.07h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:11:00</code></td>
+                <td><code>18:13:00</code></td>
+                <td class="num">9.03h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:54:00</code></td>
+                <td><code>18:14:00</code></td>
+                <td class="num">9.33h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:57:00</code></td>
+                <td><code>18:15:00</code></td>
+                <td class="num">9.3h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:00:00</code></td>
+                <td><code>18:16:00</code></td>
+                <td class="num">9.27h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:03:00</code></td>
+                <td><code>18:17:00</code></td>
+                <td class="num">9.23h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:06:00</code></td>
+                <td><code>18:18:00</code></td>
+                <td class="num">9.2h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:09:00</code></td>
+                <td><code>18:19:00</code></td>
+                <td class="num">9.17h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:52:00</code></td>
+                <td><code>18:20:00</code></td>
+                <td class="num">9.47h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:55:00</code></td>
+                <td><code>18:21:00</code></td>
+                <td class="num">9.43h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-29</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:58:00</code></td>
+                <td><code>18:22:00</code></td>
+                <td class="num">9.4h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:00:00</code></td>
+                <td><code>18:39:00</code></td>
+                <td class="num">9.65h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:03:00</code></td>
+                <td><code>18:40:00</code></td>
+                <td class="num">9.62h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:06:00</code></td>
+                <td><code>18:41:00</code></td>
+                <td class="num">9.58h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:09:00</code></td>
+                <td><code>18:42:00</code></td>
+                <td class="num">9.55h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:52:00</code></td>
+                <td><code>18:43:00</code></td>
+                <td class="num">9.85h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:55:00</code></td>
+                <td><code>18:44:00</code></td>
+                <td class="num">9.82h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>10:05:00</code></td>
+                <td><code>18:30:00</code></td>
+                <td class="num">8.42h</td>
+                <td class="num">50m</td>
+                <td>
+                  
+                    <span class="badge badge-danger">LATE</span>
+                  
+                </td>
+                <td>Late check-in recorded by biometric gate</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:01:00</code></td>
+                <td><code>18:11:00</code></td>
+                <td class="num">9.17h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:04:00</code></td>
+                <td><code>18:12:00</code></td>
+                <td class="num">9.13h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:07:00</code></td>
+                <td><code>18:13:00</code></td>
+                <td class="num">9.1h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:10:00</code></td>
+                <td><code>18:14:00</code></td>
+                <td class="num">9.07h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-28</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:53:00</code></td>
+                <td><code>18:15:00</code></td>
+                <td class="num">9.37h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:55:00</code></td>
+                <td><code>18:32:00</code></td>
+                <td class="num">9.62h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:58:00</code></td>
+                <td><code>18:33:00</code></td>
+                <td class="num">9.58h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:01:00</code></td>
+                <td><code>18:34:00</code></td>
+                <td class="num">9.55h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:04:00</code></td>
+                <td><code>18:35:00</code></td>
+                <td class="num">9.52h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:07:00</code></td>
+                <td><code>18:36:00</code></td>
+                <td class="num">9.48h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:10:00</code></td>
+                <td><code>18:37:00</code></td>
+                <td class="num">9.45h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:53:00</code></td>
+                <td><code>18:38:00</code></td>
+                <td class="num">9.75h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:56:00</code></td>
+                <td><code>18:39:00</code></td>
+                <td class="num">9.72h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:59:00</code></td>
+                <td><code>18:40:00</code></td>
+                <td class="num">9.68h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:02:00</code></td>
+                <td><code>18:41:00</code></td>
+                <td class="num">9.65h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:05:00</code></td>
+                <td><code>18:42:00</code></td>
+                <td class="num">9.62h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-27</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:08:00</code></td>
+                <td><code>18:43:00</code></td>
+                <td class="num">9.58h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP001</code></td>
+                <td><strong>Aarav Mehta</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:10:00</code></td>
+                <td><code>18:25:00</code></td>
+                <td class="num">9.25h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP002</code></td>
+                <td><strong>Neha Kulkarni</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:53:00</code></td>
+                <td><code>18:26:00</code></td>
+                <td class="num">9.55h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP003</code></td>
+                <td><strong>Rohan Verma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:56:00</code></td>
+                <td><code>18:27:00</code></td>
+                <td class="num">9.52h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP004</code></td>
+                <td><strong>Priya Nair</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:59:00</code></td>
+                <td><code>18:28:00</code></td>
+                <td class="num">9.48h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP005</code></td>
+                <td><strong>Siddharth Iyer</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:50:00</code></td>
+                <td><code>18:30:00</code></td>
+                <td class="num">8.67h</td>
+                <td class="num">35m</td>
+                <td>
+                  
+                    <span class="badge badge-danger">LATE</span>
+                  
+                </td>
+                <td>Late check-in recorded by biometric gate</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP006</code></td>
+                <td><strong>Ananya Deshmukh</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:05:00</code></td>
+                <td><code>18:30:00</code></td>
+                <td class="num">9.42h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP007</code></td>
+                <td><strong>Vikram Rathore</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:08:00</code></td>
+                <td><code>18:31:00</code></td>
+                <td class="num">9.38h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP008</code></td>
+                <td><strong>Kavya Sharma</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:11:00</code></td>
+                <td><code>18:32:00</code></td>
+                <td class="num">9.35h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP009</code></td>
+                <td><strong>Arjun Chatterjee</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:54:00</code></td>
+                <td><code>18:33:00</code></td>
+                <td class="num">9.65h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP010</code></td>
+                <td><strong>Meera Krishnan</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>08:57:00</code></td>
+                <td><code>18:34:00</code></td>
+                <td class="num">9.62h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP011</code></td>
+                <td><strong>Devansh Kapoor</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:00:00</code></td>
+                <td><code>18:35:00</code></td>
+                <td class="num">9.58h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+              <tr>
+                <td><code>2026-10-26</code></td>
+                <td><code>EMP012</code></td>
+                <td><strong>Tanya Bhatia</strong></td>
+                <td>
+                  
+                    <span class="badge badge-success">PRESENT</span>
+                  
+                </td>
+                <td><code>09:03:00</code></td>
+                <td><code>18:36:00</code></td>
+                <td class="num">9.55h</td>
+                <td class="num">0m</td>
+                <td>
+                  
+                    <span class="badge badge-success">ON TIME</span>
+                  
+                </td>
+                <td>Regular shift</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================== -->
+    <!-- TAB 6: PHASE 3 EXPLAIN PLAN & PHASE 4 16-CASE TEST SUITE           -->
+    <!-- ================================================================== -->
+    <section id="tab-diagnostics" class="tab-panel">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Phase 3 Index Execution Plan Analyzer & Phase 4 Automated Test Suite (16 Cases)</div>
+            <div class="card-subtitle">
+              Runs live <code>EXPLAIN QUERY PLAN</code> (Before vs After Indexing) and executes all 16 Valid, Boundary, Invalid, ACID Rollback, and RBAC Security test cases against the live database.
+            </div>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-primary" onclick="runLiveDiagnostics()">
+              Run Live EXPLAIN Benchmark & 16-Case Test Suite
+            </button>
+            <button class="btn btn-outline" onclick="resetDemoDb()">
+              Reset Demo Database to Clean Seed State
+            </button>
+          </div>
+        </div>
+
+        <div id="diagLoading" style="display:none; padding:12px; font-weight:600; color:var(--primary);">
+          Running EXPLAIN QUERY PLAN benchmark and 16 Phase 4 test cases...
+        </div>
+
+        <div id="diagContainer">
+          <p style="font-size:13.5px; color:var(--text-muted);">
+            Click <strong>"Run Live EXPLAIN Benchmark & 16-Case Test Suite"</strong> above to execute the verification suite in real time.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function openTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+      if (tabId === 'tab-diagnostics' && !window._diagLoaded) {
+        window._diagLoaded = true;
+        runLiveDiagnostics();
+      }
+    }
+
+    function changePeriod(monthVal) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('month', monthVal);
+      window.location.href = url.toString();
+    }
+
+    function switchActor(empId) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('switch_emp_id', empId);
+      window.location.href = url.toString();
+    }
+
+    function changeSlipEmployee(empId, monthOpt) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('slip_emp_id', empId);
+      if (monthOpt) url.searchParams.set('month', monthOpt);
+      window.location.href = url.toString();
+    }
+
+    function showResult(elId, isOk, text) {
+      const el = document.getElementById(elId);
+      el.className = 'result-box ' + (isOk ? 'ok' : 'err');
+      el.textContent = text;
+    }
+
+    async function submitSalaryUpdate(ev) {
+      ev.preventDefault();
+      const payload = {
+        emp_id: document.getElementById('salEmpId').value,
+        basic_pay: document.getElementById('salBasic').value,
+        special_allowance: document.getElementById('salSpecial').value,
+        recalc_month: document.getElementById('salRecalcMonth').value,
+        recalc_year: 2026
+      };
+      const res = await fetch('/api/admin/update-salary', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        const net = data.result.payroll_snapshot ? data.result.payroll_snapshot.net_salary : 'N/A';
+        showResult('salTxResult', true,
+          `[COMMITTED] Atomic Transaction Succeeded!\n` +
+          `Updated emp_id=${data.result.emp_id} basic_pay=₹${data.result.new_basic_pay.toLocaleString()}, ` +
+          `recalculated Net Salary=₹${net.toLocaleString()}.\nReloading page in 1.2s...`
+        );
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        showResult('salTxResult', false,
+          `[${data.error_type || 'ERROR'}] Atomic Transaction Rolled Back!\n` +
+          `Reason: ${data.error}\n` +
+          `Zero partial changes were persisted to Salary_Structure or Payroll.`
+        );
+      }
+    }
+
+    async function submitCreateEmployee(ev) {
+      ev.preventDefault();
+      const payload = {
+        emp_code: document.getElementById('newEmpCode').value,
+        first_name: document.getElementById('newFirstName').value,
+        last_name: document.getElementById('newLastName').value,
+        email: document.getElementById('newEmail').value,
+        phone: '+91-9820100199',
+        hire_date: '2026-10-01',
+        dept_id: document.getElementById('newDeptId').value,
+        designation: document.getElementById('newDesignation').value,
+        basic_pay: document.getElementById('newBasicPay').value,
+        special_allowance: document.getElementById('newSpecial').value
+      };
+      const res = await fetch('/api/admin/create-employee', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        showResult('createEmpResult', true,
+          `[COMMITTED] Created ${data.employee.emp_code} (${data.employee.full_name}) with Contracted Gross ₹${data.employee.contracted_gross.toLocaleString()}!`
+        );
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        showResult('createEmpResult', false, `[${data.error_type}] ${data.error}`);
+      }
+    }
+
+    async function runBulkPayroll() {
+      const m = document.getElementById('runPayMonth').value;
+      const res = await fetch('/api/admin/run-payroll', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({pay_month: m, pay_year: 2026, payment_status: 'PROCESSED'})
+      });
+      const data = await res.json();
+      if (data.ok) {
+        showResult('runPayrollResult', true,
+          `[STORED PROCEDURE EXECUTED] sp_process_bulk_payroll(${data.pay_month}, ${data.pay_year}) ` +
+          `processed ${data.processed_count} employees inside an atomic transaction.`
+        );
+        setTimeout(() => window.location.reload(), 1000);
+      } else {
+        showResult('runPayrollResult', false, `[${data.error_type}] ${data.error}`);
+      }
+    }
+
+    function presetOverlappingLeave() {
+      // EMP004 has approved leave 2026-10-08..2026-10-09; EMP003 has approved leave 2026-08-10..2026-08-11
+      const selEmp = document.getElementById('leaveEmpId').value;
+      if (String(selEmp) === '4') {
+        document.getElementById('leaveStart').value = '2026-10-09';
+        document.getElementById('leaveEnd').value = '2026-10-12';
+      } else {
+        document.getElementById('leaveEmpId').value = '3';
+        document.getElementById('leaveStart').value = '2026-08-10';
+        document.getElementById('leaveEnd').value = '2026-08-12';
+      }
+      document.getElementById('leaveReason').value = 'Testing overlapping leave date trigger rejection';
+    }
+
+    function presetQuotaExceededLeave() {
+      document.getElementById('leaveTypeId').value = '2'; // Sick Leave quota = 10 days
+      document.getElementById('leaveStart').value = '2026-12-01';
+      document.getElementById('leaveEnd').value = '2026-12-16';
+      document.getElementById('leaveReason').value = 'Testing 16-day Sick Leave > 10-day annual quota trigger';
+    }
+
+    async function submitLeaveRequest(ev) {
+      ev.preventDefault();
+      const payload = {
+        emp_id: document.getElementById('leaveEmpId').value,
+        leave_type_id: document.getElementById('leaveTypeId').value,
+        start_date: document.getElementById('leaveStart').value,
+        end_date: document.getElementById('leaveEnd').value,
+        reason: document.getElementById('leaveReason').value
+      };
+      const res = await fetch('/api/leave/submit', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        showResult('leaveSubmitResult', true,
+          `[LEAVE ACCEPTED] Leave Request #${data.leave_request.leave_id} (${data.leave_request.start_date} to ${data.leave_request.end_date}) submitted with status PENDING.`
+        );
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        showResult('leaveSubmitResult', false,
+          `[${data.error_type}] Database Trigger Rejected Leave Request:\n${data.error}`
+        );
+      }
+    }
+
+    async function decideLeave(leaveId, status) {
+      const res = await fetch('/api/admin/decide-leave', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({leave_id: leaveId, status: status})
+      });
+      const data = await res.json();
+      if (data.ok) {
+        window.location.reload();
+      } else {
+        alert(data.error);
+      }
+    }
+
+    function presetAttendanceOnLeave() {
+      document.getElementById('attEmpId').value = '3';
+      document.getElementById('attDate').value = '2026-08-10';
+      document.getElementById('attStatus').value = 'PRESENT';
+      document.getElementById('attCheckIn').value = '09:00:00';
+      document.getElementById('attCheckOut').value = '18:00:00';
+      document.getElementById('attRemarks').value = 'Testing PRESENT on approved leave date (2026-08-10)';
+    }
+
+    function presetInvalidCheckOut() {
+      document.getElementById('attEmpId').value = '3';
+      document.getElementById('attDate').value = '2026-11-12';
+      document.getElementById('attStatus').value = 'PRESENT';
+      document.getElementById('attCheckIn').value = '14:00:00';
+      document.getElementById('attCheckOut').value = '09:00:00';
+      document.getElementById('attRemarks').value = 'Testing check_out < check_in trigger';
+    }
+
+    async function submitAttendance(ev) {
+      ev.preventDefault();
+      const payload = {
+        emp_id: document.getElementById('attEmpId').value,
+        att_date: document.getElementById('attDate').value,
+        att_status: document.getElementById('attStatus').value,
+        check_in: document.getElementById('attCheckIn').value,
+        check_out: document.getElementById('attCheckOut').value,
+        remarks: document.getElementById('attRemarks').value
+      };
+      const res = await fetch('/api/admin/record-attendance', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.ok) {
+        const a = data.attendance;
+        showResult('attSubmitResult', true,
+          `[ATTENDANCE RECORDED] attendance_id=${a.attendance_id} on ${a.att_date}\n` +
+          `Trigger Auto-Computed -> work_hours=${a.work_hours}h, late_minutes=${a.late_minutes}m, is_late=${a.is_late}`
+        );
+      } else {
+        showResult('attSubmitResult', false,
+          `[${data.error_type}] Database Trigger / Constraint Rejected Attendance:\n${data.error}`
+        );
+      }
+    }
+
+    // RBAC Demo Helpers for EMPLOYEE Role
+    async function testRbacReadOtherSlip() {
+      const res = await fetch('/api/salary-slip/1?month=10&year=2026');
+      const data = await res.json();
+      showResult('rbacDemoResult', res.ok,
+        `HTTP ${res.status} (${data.error_type || 'OK'})\n` + JSON.stringify(data, null, 2)
+      );
+    }
+
+    async function testRbacMutateOwnSalary() {
+      const res = await fetch('/api/admin/update-salary', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({emp_id: 3, basic_pay: 250000, special_allowance: 50000})
+      });
+      const data = await res.json();
+      showResult('rbacDemoResult', res.ok,
+        `HTTP ${res.status} (${data.error_type || 'OK'})\n` + JSON.stringify(data, null, 2)
+      );
+    }
+
+    async function testRbacRunPayroll() {
+      const res = await fetch('/api/admin/run-payroll', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({pay_month: 10, pay_year: 2026})
+      });
+      const data = await res.json();
+      showResult('rbacDemoResult', res.ok,
+        `HTTP ${res.status} (${data.error_type || 'OK'})\n` + JSON.stringify(data, null, 2)
+      );
+    }
+
+    async function testRbacReadOwnSlip(myEmpId) {
+      const res = await fetch(`/api/salary-slip/${myEmpId}?month=10&year=2026`);
+      const data = await res.json();
+      showResult('rbacDemoResult', res.ok,
+        `HTTP ${res.status} (AUTHORIZED SELF-ACCESS)\n` +
+        `Employee: ${data.slip.emp_code} (${data.slip.employee_name}) | Period: ${data.slip.pay_period} | Net Salary: ₹${data.slip.net_salary.toLocaleString()}`
+      );
+    }
+
+    async function runLiveDiagnostics() {
+      const loadEl = document.getElementById('diagLoading');
+      const cont = document.getElementById('diagContainer');
+      loadEl.style.display = 'block';
+      try {
+        const res = await fetch('/api/diagnostics/explain-and-tests');
+        const data = await res.json();
+        loadEl.style.display = 'none';
+        if (!data.ok) {
+          cont.innerHTML = `<div class="result-box err" style="display:block;">${data.error}</div>`;
+          return;
+        }
+        const lm = data.explain_benchmark.late_marks_report;
+        const ss = data.explain_benchmark.salary_slip_report;
+        const ts = data.test_suite;
+
+        let html = `
+          <div class="grid-2" style="margin-bottom:20px;">
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:16px;">
+              <h4 style="margin-bottom:8px;">Report 3 (Late-Marks Report) — EXPLAIN QUERY PLAN</h4>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Index: <code>${lm.index_used}</code></p>
+              <div style="font-size:12px;margin-bottom:6px;"><strong>BEFORE Index:</strong><br/><code>${lm.before_index_plan.join(' → ')}</code></div>
+              <div style="font-size:12px;margin-bottom:8px;"><strong>AFTER Index:</strong><br/><code style="color:var(--success);">${lm.after_index_plan.join(' → ')}</code></div>
+              <span class="badge badge-success">300-Run Latency: ${lm.before_200_runs_ms}ms → ${lm.after_200_runs_ms}ms (${lm.improvement_pct}% Faster)</span>
+            </div>
+            <div style="background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:16px;">
+              <h4 style="margin-bottom:8px;">Report 2 (Monthly Salary Slip) — EXPLAIN QUERY PLAN</h4>
+              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Index: <code>${ss.index_used}</code></p>
+              <div style="font-size:12px;margin-bottom:6px;"><strong>BEFORE Index (Full Table Scan):</strong><br/><code style="color:var(--danger);">${ss.before_index_plan.join(' → ')}</code></div>
+              <div style="font-size:12px;margin-bottom:8px;"><strong>AFTER Index (B-Tree Period Seek):</strong><br/><code style="color:var(--success);">${ss.after_index_plan.join(' → ')}</code></div>
+              <span class="badge badge-success">Full Scan Eliminated via Composite B-Tree Seek</span>
+            </div>
+          </div>
+
+          <h4 style="margin-bottom:10px;">Phase 4 Security, RBAC, Transaction & Boundary Test Suite (${ts.passed}/${ts.total} PASSED)</h4>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Test Scenario</th>
+                  <th>Expected Behavior</th>
+                  <th>Actual Database / RBAC Output</th>
+                  <th>Result</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        for (const r of ts.results) {
+          html += `
+            <tr>
+              <td><code>${r.test_id}</code></td>
+              <td><span class="badge badge-purple">${r.category}</span></td>
+              <td><strong>${r.title}</strong></td>
+              <td>${r.expected}</td>
+              <td style="font-family:monospace;font-size:11.5px;">${r.actual}</td>
+              <td><span class="badge ${r.status === 'PASS' ? 'badge-success' : 'badge-danger'}">${r.status}</span></td>
+            </tr>
+          `;
+        }
+        html += `</tbody></table></div>`;
+        cont.innerHTML = html;
+      } catch (e) {
+        loadEl.style.display = 'none';
+        cont.innerHTML = `<div class="result-box err" style="display:block;">${e}</div>`;
+      }
+    }
+
+    async function resetDemoDb() {
+      await fetch('/api/admin/reset-demo-db', {method: 'POST'});
+      window.location.href = '/';
+    }
+  </script>
+
+        <script>
+        window.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          const panel = document.getElementById('tab-report-slip');
+          if (panel) panel.classList.add('active');
+          const btns = document.querySelectorAll('.tab-btn');
+          const tabMap = {
+            'tab-overview': 0,
+            'tab-report-att': 1,
+            'tab-report-slip': 2,
+            'tab-report-late': 3,
+            'tab-att-leave': 4,
+            'tab-diagnostics': 5
+          };
+          if (btns[tabMap['tab-report-slip']]) btns[tabMap['tab-report-slip']].classList.add('active');
+          
+        });
+        </script>
+        </body>
+        
+</html>

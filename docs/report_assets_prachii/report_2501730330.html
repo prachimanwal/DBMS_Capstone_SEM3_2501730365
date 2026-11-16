@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>DBMS Project Report — Harshwardhan (2501730330)</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 15mm 16mm 15mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.52;
+    font-size: 10.2pt;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+  h1, h2, h3, h4 {
+    color: #0f2942;
+    margin-top: 14pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+  }
+  h1 {
+    font-size: 19pt;
+    font-weight: 800;
+    text-align: center;
+    margin-top: 4pt;
+    margin-bottom: 4pt;
+    letter-spacing: -0.3px;
+  }
+  .doc-subtitle {
+    text-align: center;
+    font-size: 11.5pt;
+    font-style: italic;
+    color: #475569;
+    margin-bottom: 4pt;
+  }
+  .uni-header {
+    text-align: center;
+    font-size: 10.5pt;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 14pt;
+  }
+  h2 {
+    font-size: 13.5pt;
+    font-weight: 700;
+    border-bottom: 2px solid #1e3a8a;
+    padding-bottom: 3pt;
+    margin-top: 18pt;
+  }
+  h3 {
+    font-size: 11.2pt;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-top: 12pt;
+  }
+  p {
+    margin: 0 0 8pt 0;
+    text-align: justify;
+  }
+  ul, ol {
+    margin: 0 0 8pt 18pt;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 3.5pt;
+  }
+  .meta-table {
+    width: 82%;
+    margin: 0 auto 16pt auto;
+    border-collapse: collapse;
+    font-size: 10pt;
+  }
+  .meta-table td {
+    border: 1px solid #cbd5e1;
+    padding: 6.5pt 11pt;
+  }
+  .meta-table td:first-child {
+    background: #f1f5f9;
+    font-weight: 700;
+    width: 34%;
+    color: #0f172a;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 12pt 0;
+    font-size: 8.8pt;
+    page-break-inside: avoid;
+  }
+  table.data-table th {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: left;
+    padding: 5.5pt 7pt;
+    border: 1px solid #1e3a8a;
+  }
+  table.data-table td {
+    padding: 5pt 7pt;
+    border: 1px solid #cbd5e1;
+    vertical-align: top;
+  }
+  table.data-table tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  pre {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 3.5px solid #1e3a8a;
+    border-radius: 4px;
+    padding: 8pt 10pt;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 7.9pt;
+    line-height: 1.38;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 6pt 0 10pt 0;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background: #f1f5f9;
+    padding: 1pt 3.5pt;
+    border-radius: 3px;
+    font-size: 8.8pt;
+  }
+  .fig-box {
+    text-align: center;
+    margin: 10pt 0 14pt 0;
+    page-break-inside: avoid;
+  }
+  .fig-box img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+  }
+  .fig-caption {
+    font-size: 9pt;
+    font-style: italic;
+    color: #475569;
+    margin-top: 4pt;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+  .pass-badge {
+    color: #15803d;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+  <div style="text-align:center; font-size:10.5pt; font-weight:700; color:#1e3a8a; letter-spacing:0.6px; margin-top:4pt;">
+    DATABASE MANAGEMENT SYSTEMS — SEQUENTIAL COURSE PROJECT (PHASES 1–5)
+  </div>
+  <h1>PAYROLL &amp; ATTENDANCE MANAGEMENT SYSTEM</h1>
+  <div class="doc-subtitle">
+    End-to-End 3NF Relational Schema Design, Stored Procedures, Validation Triggers, Query Optimization, RBAC &amp; Web UI
+  </div>
+  <div class="uni-header">
+    School of Engineering &amp; Technology, K.R. Mangalam University
+  </div>
+
+  <table class="meta-table">
+    <tr><td>Student Name</td><td><strong>Harshwardhan</strong></td></tr>
+    <tr><td>Roll Number</td><td><strong>2501730330</strong></td></tr>
+    <tr><td>Program &amp; Section</td><td>B.Tech CSE (AI/ML) — Section C</td></tr>
+    <tr><td>Course</td><td>Database Management Systems (DBMS)</td></tr>
+    <tr><td>Project Theme</td><td>Payroll &amp; Attendance Management System (Sequential Phases 1 to 5)</td></tr>
+  </table>
+
+  <h3>1. Project Overview &amp; Sequential Phase Summary</h3>
+  <p>This project report presents the end-to-end design and implementation of a connected Payroll & Attendance Management System developed across five sequential phases. Every phase directly uses the locked Phase 1 Third Normal Form (3NF) database schema, ensuring that the DDL tables, stored procedures, validation triggers, indexed analytical reports, role-based access control (RBAC), transactional workflows, and Flask web dashboard run as one unified application.</p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:9%;">Phase</th>
+        <th style="width:24%;">Phase Title</th>
+        <th style="width:45%;">Completed Implementation Summary</th>
+        <th style="width:14%;">Deliverable Files</th>
+        <th style="width:8%;" class="num">Marks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Phase 1</strong></td>
+        <td>Data Modeling &amp; Schema Design</td>
+        <td>Identified 7 entities (<code>Department</code>, <code>Employee</code>, <code>Salary_Structure</code>, <code>Leave_Type</code>, <code>Leave_Request</code>, <code>Attendance</code>, <code>Payroll</code>), drew Crow's Foot ER diagram, normalized from UNF &rarr; 1NF &rarr; 2NF &rarr; 3NF, and locked PK/FK/Unique/Check constraints.</td>
+        <td><code>phase1_schema_ddl.sql</code></td>
+        <td class="num">20</td>
+      </tr>
+      <tr>
+        <td><strong>Phase 2</strong></td>
+        <td>Procedural Implementation</td>
+        <td>Implemented DDL, wrote stored functions (<code>fn_calculate_income_tax</code>, <code>fn_calculate_gross_salary</code>, <code>fn_calculate_late_penalty_days</code>) &amp; procedures (<code>sp_process_monthly_payroll</code>), triggers for overlapping leave &amp; attendance validation, and seeded 12 employees across 3 months (780 attendance rows).</td>
+        <td><code>phase2_procedures_triggers.sql</code>, <code>procedures.py</code></td>
+        <td class="num">20</td>
+      </tr>
+      <tr>
+        <td><strong>Phase 3</strong></td>
+        <td>Query &amp; Report Development</td>
+        <td>Built 3 analytical reports (Monthly Attendance Summary, Employee Salary Slip, Late-Marks Report), added composite B-Tree indexes, and demonstrated <code>EXPLAIN QUERY PLAN</code> improvement (27.1% faster).</td>
+        <td><code>phase3_reports_and_indexes.sql</code>, <code>reports.py</code></td>
+        <td class="num">20</td>
+      </tr>
+      <tr>
+        <td><strong>Phase 4</strong></td>
+        <td>Security, Access Control &amp; Testing</td>
+        <td>Implemented RBAC separating <code>HR_ADMIN</code> (full access) from <code>EMPLOYEE</code> (read-only own records), wrapped salary/payroll updates in <code>SAVEPOINT / COMMIT / ROLLBACK</code> transactions, and verified 16 test cases (16/16 PASS).</td>
+        <td><code>phase4_rbac_and_transactions.sql</code>, <code>rbac.py</code></td>
+        <td class="num">20</td>
+      </tr>
+      <tr>
+        <td><strong>Phase 5</strong></td>
+        <td>Integration, UI &amp; Presentation</td>
+        <td>Built a connected Flask role-based web dashboard where HR/Admin manages employees/payroll/reports and Employees view only their own attendance and salary slips, plus enterprise scaling analysis.</td>
+        <td><code>app.py</code>, <code>index.html</code>, <code>README.md</code></td>
+        <td class="num">20</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================================================================== -->
+  <!-- PHASE 1                                                              -->
+  <!-- ==================================================================== -->
+  <h2>Phase 1: Data Modeling &amp; Schema Design (20 Marks)</h2>
+  <p>During Phase 1 schema design, I focused on eliminating data redundancy and update anomalies across the five core entities (Employee, Attendance, Leave_Request, Salary_Structure, and Payroll). While checking functional dependencies for 3NF compliance, I identified two transitive dependencies—department attributes depending on dept_id inside Employee, and annual quota/paid status depending on leave_type_id inside Leave_Request—and extracted Department and Leave_Type as separate lookup tables, resulting in a clean 7-table 3NF schema.</p>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/fig1_er_diagram.png" alt="ER Diagram" />
+    <div class="fig-caption">Figure 1.1: Entity-Relationship (ER) Diagram showing all 7 normalized 3NF tables, data types, PK/FK constraints, and cardinalities.</div>
+  </div>
+
+  <h3>1.1 Step-by-Step Normalization Process (UNF &rarr; 1NF &rarr; 2NF &rarr; 3NF)</h3>
+  <ul>
+    <li><strong>Unnormalized Form (UNF):</strong> A flat payroll register storing employee details together with repeating groups of daily attendance punches <code>{att_date, check_in, check_out, att_status}</code>, multiple leave requests <code>{leave_id, type_name, start_date, end_date}</code>, and monthly payslips <code>{pay_month, pay_year, net_salary}</code> inside a single table causes severe data duplication.</li>
+    <li><strong>First Normal Form (1NF):</strong> Repeating groups are eliminated by placing daily attendance rows, leave requests, and monthly payroll records into separate tables with atomic columns and explicit primary/candidate keys: <code>Employee(emp_id)</code>, <code>Attendance(emp_id, att_date)</code>, <code>Leave_Request(leave_id)</code>, and <code>Payroll(emp_id, pay_month, pay_year)</code>. Employee names are stored atomically as <code>first_name</code> and <code>last_name</code>.</li>
+    <li><strong>Second Normal Form (2NF):</strong> Every non-key attribute must depend on the <em>entire</em> composite key. In <code>Attendance(emp_id, att_date)</code> and <code>Payroll(emp_id, pay_month, pay_year)</code>, attributes like <code>employee_name</code>, <code>designation</code>, and contractual <code>basic_pay</code> depend only on <code>emp_id</code> (partial dependency). Moving employee identity to <code>Employee(emp_id)</code> and contractual salary rates to <code>Salary_Structure(emp_id)</code> removes all partial dependencies. Only month-specific prorated figures (<code>basic_earned</code>, <code>hra_earned</code>, <code>lop_days</code>, <code>net_salary</code>) remain in <code>Payroll</code>.</li>
+    <li><strong>Third Normal Form (3NF):</strong> Every non-key attribute must depend only on the primary key with no transitive dependencies:
+      <ol>
+        <li><code>emp_id &rarr; dept_id &rarr; (dept_code, dept_name, base_location)</code> is resolved by extracting the <code>Department</code> table.</li>
+        <li><code>leave_id &rarr; leave_type_id &rarr; (type_code, type_name, annual_quota, is_paid)</code> is resolved by extracting the <code>Leave_Type</code> table.</li>
+        <li><code>salary_id &rarr; (basic_pay, hra_percent, da_percent, special_allowance) &rarr; contracted_gross</code> is resolved by omitting derived currency totals from <code>Salary_Structure</code> and computing them dynamically via <code>fn_calculate_gross_salary()</code>.</li>
+      </ol>
+    </li>
+  </ul>
+
+  <h3>1.2 Final Locked Relational Schema (Used Unchanged in Phases 2–5)</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Relation Name</th>
+        <th>Primary Key</th>
+        <th>Foreign Keys</th>
+        <th>Key Integrity &amp; Domain Constraints</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Department</code></td>
+        <td><code>dept_id</code></td>
+        <td>None</td>
+        <td><code>UNIQUE(dept_code)</code>, <code>UNIQUE(dept_name)</code></td>
+      </tr>
+      <tr>
+        <td><code>Employee</code></td>
+        <td><code>emp_id</code></td>
+        <td><code>dept_id &rarr; Department(dept_id)</code></td>
+        <td><code>UNIQUE(emp_code)</code>, <code>UNIQUE(email)</code>, <code>CHECK(role IN ('HR_ADMIN','EMPLOYEE'))</code></td>
+      </tr>
+      <tr>
+        <td><code>Salary_Structure</code></td>
+        <td><code>salary_id</code></td>
+        <td><code>emp_id &rarr; Employee(emp_id)</code></td>
+        <td><code>UNIQUE(emp_id)</code> (1:1), <code>CHECK(basic_pay &gt; 0)</code>, <code>CHECK(special_allowance &gt;= 0)</code></td>
+      </tr>
+      <tr>
+        <td><code>Leave_Type</code></td>
+        <td><code>leave_type_id</code></td>
+        <td>None</td>
+        <td><code>UNIQUE(type_code)</code>, <code>CHECK(annual_quota &gt;= 0)</code>, <code>CHECK(is_paid IN (0,1))</code></td>
+      </tr>
+      <tr>
+        <td><code>Leave_Request</code></td>
+        <td><code>leave_id</code></td>
+        <td><code>emp_id &rarr; Employee(emp_id)</code><br/><code>leave_type_id &rarr; Leave_Type</code><br/><code>approved_by &rarr; Employee</code></td>
+        <td><code>CHECK(end_date &gt;= start_date)</code>, <code>CHECK(status IN ('PENDING','APPROVED','REJECTED'))</code></td>
+      </tr>
+      <tr>
+        <td><code>Attendance</code></td>
+        <td><code>attendance_id</code></td>
+        <td><code>emp_id &rarr; Employee(emp_id)</code></td>
+        <td><code>UNIQUE(emp_id, att_date)</code>, <code>CHECK(att_status IN ('PRESENT','ABSENT','HALF_DAY','ON_LEAVE'))</code></td>
+      </tr>
+      <tr>
+        <td><code>Payroll</code></td>
+        <td><code>payroll_id</code></td>
+        <td><code>emp_id &rarr; Employee(emp_id)</code></td>
+        <td><code>UNIQUE(emp_id, pay_month, pay_year)</code>, <code>CHECK(pay_month BETWEEN 1 AND 12)</code>, <code>CHECK(net_salary &gt;= 0)</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================================================================== -->
+  <!-- PHASE 2                                                              -->
+  <!-- ==================================================================== -->
+  <div class="page-break"></div>
+  <h2>Phase 2: Procedural Implementation — DDL, Procedures, Triggers &amp; Seed Data (20 Marks)</h2>
+  <p>
+    In Phase 2, I implemented the locked Phase 1 schema using SQL DDL (<code>sql/phase1_schema_ddl.sql</code>), wrote stored
+    functions and procedures for salary proration, Loss of Pay (LOP), and progressive slab-based income tax (TDS) calculation,
+    and added database triggers to validate attendance and leave entries before they are written to disk.
+  </p>
+
+  <h3>2.1 Phase 1 &amp; 2 SQL DDL Implementation (<code>sql/phase1_schema_ddl.sql</code>)</h3>
+  <pre>-- ============================================================================
+-- PHASE 1 &amp; PHASE 2 (Part A): 3NF RELATIONAL SCHEMA DDL
+-- Theme: Payroll &amp; Attendance Management System
+-- Normalization Level: Strict Third Normal Form (3NF / BCNF)
+-- Note: This exact schema is locked in Phase 1 and used unchanged across Phases 2–5.
+-- ============================================================================
+
+PRAGMA foreign_keys = ON;
+
+DROP TABLE IF EXISTS Payroll;
+DROP TABLE IF EXISTS Attendance;
+DROP TABLE IF EXISTS Leave_Request;
+DROP TABLE IF EXISTS Leave_Type;
+DROP TABLE IF EXISTS Salary_Structure;
+DROP TABLE IF EXISTS Employee;
+DROP TABLE IF EXISTS Department;
+
+-- ----------------------------------------------------------------------------
+-- 1. DEPARTMENT (Eliminates transitive dependency: emp_id -&gt; dept_id -&gt; dept_name, base_location)
+-- ----------------------------------------------------------------------------
+CREATE TABLE Department (
+    dept_id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    dept_code       VARCHAR(10)  NOT NULL UNIQUE,
+    dept_name       VARCHAR(100) NOT NULL UNIQUE,
+    base_location   VARCHAR(100) NOT NULL
+);
+
+-- ----------------------------------------------------------------------------
+-- 2. EMPLOYEE (Core Entity: Stores employee identity, department FK, and RBAC role)
+-- ----------------------------------------------------------------------------
+CREATE TABLE Employee (
+    emp_id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_code        VARCHAR(15)  NOT NULL UNIQUE,
+    first_name      VARCHAR(50)  NOT NULL,
+    last_name       VARCHAR(50)  NOT NULL,
+    email           VARCHAR(120) NOT NULL UNIQUE,
+    phone           VARCHAR(20)  NOT NULL,
+    hire_date       DATE         NOT NULL,
+    designation     VARCHAR(80)  NOT NULL,
+    role            VARCHAR(20)  NOT NULL DEFAULT &#x27;EMPLOYEE&#x27;
+                    CHECK (role IN (&#x27;HR_ADMIN&#x27;, &#x27;EMPLOYEE&#x27;)),
+    password_hash   VARCHAR(128) NOT NULL,
+    status          VARCHAR(15)  NOT NULL DEFAULT &#x27;ACTIVE&#x27;
+                    CHECK (status IN (&#x27;ACTIVE&#x27;, &#x27;INACTIVE&#x27;)),
+    dept_id         INTEGER      NOT NULL,
+    CONSTRAINT fk_employee_dept
+        FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- ----------------------------------------------------------------------------
+-- 3. SALARY_STRUCTURE (Core Entity: Salary — 1:1 with Employee)
+-- Stores base pay and statutory component rates. Derived amounts are not stored
+-- here to strictly preserve 3NF (no transitive/derived dependencies).
+-- ----------------------------------------------------------------------------
+CREATE TABLE Salary_Structure (
+    salary_id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id              INTEGER        NOT NULL UNIQUE,
+    effective_from      DATE           NOT NULL,
+    basic_pay           NUMERIC(12, 2) NOT NULL CHECK (basic_pay &gt; 0),
+    hra_percent         NUMERIC(5, 2)  NOT NULL DEFAULT 40.00 CHECK (hra_percent &gt;= 0 AND hra_percent &lt;= 100),
+    da_percent          NUMERIC(5, 2)  NOT NULL DEFAULT 15.00 CHECK (da_percent &gt;= 0 AND da_percent &lt;= 100),
+    special_allowance   NUMERIC(12, 2) NOT NULL DEFAULT 0.00  CHECK (special_allowance &gt;= 0),
+    pf_percent          NUMERIC(5, 2)  NOT NULL DEFAULT 12.00 CHECK (pf_percent &gt;= 0 AND pf_percent &lt;= 30),
+    professional_tax    NUMERIC(8, 2)  NOT NULL DEFAULT 200.00 CHECK (professional_tax &gt;= 0),
+    standard_check_in   TIME           NOT NULL DEFAULT &#x27;09:15:00&#x27;,
+    CONSTRAINT fk_salary_employee
+        FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- ----------------------------------------------------------------------------
+-- 4. LEAVE_TYPE (Eliminates transitive dependency: leave_id -&gt; leave_type_id -&gt; type_name, annual_quota, is_paid)
+-- ----------------------------------------------------------------------------
+CREATE TABLE Leave_Type (
+    leave_type_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    type_code       VARCHAR(10) NOT NULL UNIQUE,
+    type_name       VARCHAR(50) NOT NULL UNIQUE,
+    annual_quota    INTEGER     NOT NULL CHECK (annual_quota &gt;= 0),
+    is_paid         INTEGER     NOT NULL DEFAULT 1 CHECK (is_paid IN (0, 1))
+);
+
+-- ----------------------------------------------------------------------------
+-- 5. LEAVE_REQUEST (Core Entity: Leave — 1:N with Employee)
+-- ----------------------------------------------------------------------------
+CREATE TABLE Leave_Request (
+    leave_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id          INTEGER      NOT NULL,
+    leave_type_id   INTEGER      NOT NULL,
+    start_date      DATE         NOT NULL,
+    end_date        DATE         NOT NULL,
+    reason          VARCHAR(255) NOT NULL,
+    status          VARCHAR(15)  NOT NULL DEFAULT &#x27;PENDING&#x27;
+                    CHECK (status IN (&#x27;PENDING&#x27;, &#x27;APPROVED&#x27;, &#x27;REJECTED&#x27;)),
+    approved_by     INTEGER      NULL,
+    applied_on      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_leave_dates CHECK (end_date &gt;= start_date),
+    CONSTRAINT fk_leave_employee
+        FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_leave_type
+        FOREIGN KEY (leave_type_id) REFERENCES Leave_Type(leave_type_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT,
+    CONSTRAINT fk_leave_approver
+        FOREIGN KEY (approved_by) REFERENCES Employee(emp_id)
+        ON UPDATE CASCADE ON DELETE SET NULL
+);
+
+-- ----------------------------------------------------------------------------
+-- 6. ATTENDANCE (Core Entity: Attendance — 1:N with Employee, Unique per (emp_id, att_date))
+-- ----------------------------------------------------------------------------
+CREATE TABLE Attendance (
+    attendance_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id          INTEGER        NOT NULL,
+    att_date        DATE           NOT NULL,
+    check_in        TIME           NULL,
+    check_out       TIME           NULL,
+    work_hours      NUMERIC(4, 2)  NOT NULL DEFAULT 0.00 CHECK (work_hours &gt;= 0 AND work_hours &lt;= 24),
+    att_status      VARCHAR(15)    NOT NULL
+                    CHECK (att_status IN (&#x27;PRESENT&#x27;, &#x27;ABSENT&#x27;, &#x27;HALF_DAY&#x27;, &#x27;ON_LEAVE&#x27;)),
+    late_minutes    INTEGER        NOT NULL DEFAULT 0 CHECK (late_minutes &gt;= 0),
+    is_late         INTEGER        NOT NULL DEFAULT 0 CHECK (is_late IN (0, 1)),
+    remarks         VARCHAR(200)   NULL,
+    CONSTRAINT uq_attendance_emp_date UNIQUE (emp_id, att_date),
+    CONSTRAINT fk_attendance_employee
+        FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- ----------------------------------------------------------------------------
+-- 7. PAYROLL (Core Entity: Monthly Payroll Disbursement — 1:N with Employee)
+-- Captures the immutable monthly historical snapshot computed by the Payroll Engine.
+-- ----------------------------------------------------------------------------
+CREATE TABLE Payroll (
+    payroll_id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id                      INTEGER        NOT NULL,
+    pay_month                   INTEGER        NOT NULL CHECK (pay_month BETWEEN 1 AND 12),
+    pay_year                    INTEGER        NOT NULL CHECK (pay_year BETWEEN 2020 AND 2100),
+    working_days                INTEGER        NOT NULL CHECK (working_days &gt; 0 AND working_days &lt;= 31),
+    present_days                NUMERIC(4, 1)  NOT NULL DEFAULT 0.0 CHECK (present_days &gt;= 0),
+    paid_leave_days             NUMERIC(4, 1)  NOT NULL DEFAULT 0.0 CHECK (paid_leave_days &gt;= 0),
+    lop_days                    NUMERIC(4, 1)  NOT NULL DEFAULT 0.0 CHECK (lop_days &gt;= 0),
+    late_count                  INTEGER        NOT NULL DEFAULT 0   CHECK (late_count &gt;= 0),
+    late_penalty_days           NUMERIC(4, 1)  NOT NULL DEFAULT 0.0 CHECK (late_penalty_days &gt;= 0),
+    basic_earned                NUMERIC(12, 2) NOT NULL CHECK (basic_earned &gt;= 0),
+    hra_earned                  NUMERIC(12, 2) NOT NULL CHECK (hra_earned &gt;= 0),
+    da_earned                   NUMERIC(12, 2) NOT NULL CHECK (da_earned &gt;= 0),
+    special_allowance_earned    NUMERIC(12, 2) NOT NULL CHECK (special_allowance_earned &gt;= 0),
+    gross_salary                NUMERIC(12, 2) NOT NULL CHECK (gross_salary &gt;= 0),
+    pf_deduction                NUMERIC(12, 2) NOT NULL CHECK (pf_deduction &gt;= 0),
+    professional_tax            NUMERIC(12, 2) NOT NULL CHECK (professional_tax &gt;= 0),
+    income_tax_deduction        NUMERIC(12, 2) NOT NULL CHECK (income_tax_deduction &gt;= 0),
+    lop_deduction               NUMERIC(12, 2) NOT NULL CHECK (lop_deduction &gt;= 0),
+    total_deductions            NUMERIC(12, 2) NOT NULL CHECK (total_deductions &gt;= 0),
+    net_salary                  NUMERIC(12, 2) NOT NULL CHECK (net_salary &gt;= 0),
+    payment_status              VARCHAR(15)    NOT NULL DEFAULT &#x27;PROCESSED&#x27;
+                                CHECK (payment_status IN (&#x27;DRAFT&#x27;, &#x27;PROCESSED&#x27;, &#x27;PAID&#x27;)),
+    processed_at                DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_payroll_emp_period UNIQUE (emp_id, pay_month, pay_year),
+    CONSTRAINT fk_payroll_employee
+        FOREIGN KEY (emp_id) REFERENCES Employee(emp_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+</pre>
+
+  <h3>2.2 Validation Triggers &amp; Stored Procedures (<code>sql/phase2_procedures_triggers.sql</code>)</h3>
+  <p>
+    The script below defines the triggers that enforce business rules at the database engine level:
+    (1) rejecting overlapping approved/pending leave requests (<code>trg_validate_leave_overlap_insert</code> and <code>trg_validate_leave_overlap_update</code>),
+    (2) rejecting paid leave requests that exceed the annual quota (<code>trg_validate_leave_quota_insert</code>),
+    (3) preventing an employee from being marked <code>PRESENT</code> on an approved leave date or logging <code>check_out &lt;= check_in</code> (<code>trg_validate_attendance_before_insert</code>),
+    and (4) automatically calculating <code>late_minutes</code>, <code>is_late</code> (past <code>09:15:00</code>), and <code>work_hours</code> on every attendance insert/update.
+  </p>
+  <pre>-- ============================================================================
+-- PHASE 2 (Part B): STORED FUNCTIONS, PROCEDURES &amp; VALIDATION TRIGGERS
+-- Uses the exact Phase 1 3NF Schema (Department, Employee, Salary_Structure,
+-- Leave_Type, Leave_Request, Attendance, Payroll)
+-- ============================================================================
+
+PRAGMA foreign_keys = ON;
+
+DROP TRIGGER IF EXISTS trg_validate_leave_overlap_insert;
+DROP TRIGGER IF EXISTS trg_validate_leave_overlap_update;
+DROP TRIGGER IF EXISTS trg_validate_leave_quota_insert;
+DROP TRIGGER IF EXISTS trg_validate_attendance_before_insert;
+DROP TRIGGER IF EXISTS trg_validate_attendance_before_update;
+DROP TRIGGER IF EXISTS trg_compute_attendance_metrics_insert;
+DROP TRIGGER IF EXISTS trg_compute_attendance_metrics_update;
+DROP TRIGGER IF EXISTS trg_validate_salary_positive_insert;
+DROP TRIGGER IF EXISTS trg_validate_salary_positive_update;
+
+-- ============================================================================
+-- SECTION 1: DATABASE TRIGGERS FOR LEAVE &amp; ATTENDANCE VALIDATION
+-- ============================================================================
+
+-- ----------------------------------------------------------------------------
+-- Trigger 1A: Reject invalid or overlapping leave dates on INSERT
+-- Prevents an employee from submitting a leave request that overlaps with an
+-- existing APPROVED or PENDING leave request:
+-- Overlap condition: (NEW.start_date &lt;= existing.end_date) AND (NEW.end_date &gt;= existing.start_date)
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_leave_overlap_insert
+BEFORE INSERT ON Leave_Request
+FOR EACH ROW
+BEGIN
+    -- 1. Validate chronological date order
+    SELECT CASE
+        WHEN date(NEW.end_date) &lt; date(NEW.start_date) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [LEAVE_DATE_ORDER]: Leave end_date cannot be earlier than start_date.&#x27;)
+    END;
+
+    -- 2. Reject overlapping APPROVED or PENDING leave dates for the same employee
+    SELECT CASE
+        WHEN NEW.status IN (&#x27;PENDING&#x27;, &#x27;APPROVED&#x27;) AND EXISTS (
+            SELECT 1
+            FROM Leave_Request lr
+            WHERE lr.emp_id = NEW.emp_id
+              AND lr.status IN (&#x27;PENDING&#x27;, &#x27;APPROVED&#x27;)
+              AND date(NEW.start_date) &lt;= date(lr.end_date)
+              AND date(NEW.end_date) &gt;= date(lr.start_date)
+        ) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [LEAVE_OVERLAP]: Overlapping approved or pending leave dates exist for this employee.&#x27;)
+    END;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 1B: Reject overlapping leave dates on UPDATE (e.g., when approving/modifying)
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_leave_overlap_update
+BEFORE UPDATE ON Leave_Request
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN date(NEW.end_date) &lt; date(NEW.start_date) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [LEAVE_DATE_ORDER]: Leave end_date cannot be earlier than start_date.&#x27;)
+    END;
+
+    SELECT CASE
+        WHEN NEW.status IN (&#x27;PENDING&#x27;, &#x27;APPROVED&#x27;) AND EXISTS (
+            SELECT 1
+            FROM Leave_Request lr
+            WHERE lr.emp_id = NEW.emp_id
+              AND lr.leave_id != NEW.leave_id
+              AND lr.status IN (&#x27;PENDING&#x27;, &#x27;APPROVED&#x27;)
+              AND date(NEW.start_date) &lt;= date(lr.end_date)
+              AND date(NEW.end_date) &gt;= date(lr.start_date)
+        ) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [LEAVE_OVERLAP]: Updating this leave creates an overlap with an existing approved/pending leave.&#x27;)
+    END;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 2: Validate Annual Leave Quota on INSERT
+-- Rejects paid leave requests that exceed the annual_quota in Leave_Type
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_leave_quota_insert
+BEFORE INSERT ON Leave_Request
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN (
+            SELECT lt.is_paid FROM Leave_Type lt WHERE lt.leave_type_id = NEW.leave_type_id
+        ) = 1
+        AND (
+            COALESCE((
+                SELECT SUM(CAST(julianday(lr.end_date) - julianday(lr.start_date) + 1 AS INTEGER))
+                FROM Leave_Request lr
+                WHERE lr.emp_id = NEW.emp_id
+                  AND lr.leave_type_id = NEW.leave_type_id
+                  AND lr.status = &#x27;APPROVED&#x27;
+                  AND strftime(&#x27;%Y&#x27;, lr.start_date) = strftime(&#x27;%Y&#x27;, NEW.start_date)
+            ), 0) + CAST(julianday(NEW.end_date) - julianday(NEW.start_date) + 1 AS INTEGER)
+        ) &gt; (
+            SELECT lt.annual_quota FROM Leave_Type lt WHERE lt.leave_type_id = NEW.leave_type_id
+        ) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [LEAVE_QUOTA_EXCEEDED]: Requested leave days exceed annual quota for this leave type.&#x27;)
+    END;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 3A: Validate Attendance Entry BEFORE INSERT
+-- 1. Rejects marking PRESENT or HALF_DAY on an APPROVED leave date.
+-- 2. Requires check_in time when status is PRESENT or HALF_DAY.
+-- 3. Rejects check_out &lt;= check_in when both are present.
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_attendance_before_insert
+BEFORE INSERT ON Attendance
+FOR EACH ROW
+BEGIN
+    -- 1. Cannot mark PRESENT or HALF_DAY on an APPROVED leave date
+    SELECT CASE
+        WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;) AND EXISTS (
+            SELECT 1
+            FROM Leave_Request lr
+            WHERE lr.emp_id = NEW.emp_id
+              AND lr.status = &#x27;APPROVED&#x27;
+              AND date(NEW.att_date) BETWEEN date(lr.start_date) AND date(lr.end_date)
+        ) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [ATTENDANCE_ON_APPROVED_LEAVE]: Cannot mark PRESENT/HALF_DAY on an approved leave date.&#x27;)
+    END;
+
+    -- 2. PRESENT / HALF_DAY requires check_in time
+    SELECT CASE
+        WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;) AND NEW.check_in IS NULL THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [MISSING_CHECK_IN]: check_in time is required when attendance status is PRESENT or HALF_DAY.&#x27;)
+    END;
+
+    -- 3. Validate check_out &gt; check_in
+    SELECT CASE
+        WHEN NEW.check_in IS NOT NULL AND NEW.check_out IS NOT NULL
+             AND time(NEW.check_out) &lt;= time(NEW.check_in) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_CHECK_OUT]: check_out time must be strictly after check_in time.&#x27;)
+    END;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 3B: Validate Attendance Entry BEFORE UPDATE
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_attendance_before_update
+BEFORE UPDATE ON Attendance
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;) AND EXISTS (
+            SELECT 1
+            FROM Leave_Request lr
+            WHERE lr.emp_id = NEW.emp_id
+              AND lr.status = &#x27;APPROVED&#x27;
+              AND date(NEW.att_date) BETWEEN date(lr.start_date) AND date(lr.end_date)
+        ) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [ATTENDANCE_ON_APPROVED_LEAVE]: Cannot mark PRESENT/HALF_DAY on an approved leave date.&#x27;)
+    END;
+
+    SELECT CASE
+        WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;) AND NEW.check_in IS NULL THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [MISSING_CHECK_IN]: check_in time is required when attendance status is PRESENT or HALF_DAY.&#x27;)
+    END;
+
+    SELECT CASE
+        WHEN NEW.check_in IS NOT NULL AND NEW.check_out IS NOT NULL
+             AND time(NEW.check_out) &lt;= time(NEW.check_in) THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_CHECK_OUT]: check_out time must be strictly after check_in time.&#x27;)
+    END;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 4A: Auto-Compute Late Minutes, Late Flag &amp; Work Hours AFTER INSERT
+-- Compares check_in against Salary_Structure.standard_check_in (default 09:15:00)
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_compute_attendance_metrics_insert
+AFTER INSERT ON Attendance
+FOR EACH ROW
+WHEN NEW.check_in IS NOT NULL
+BEGIN
+    UPDATE Attendance
+    SET
+        late_minutes = CASE
+            WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;)
+                 AND (strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) &gt; 0
+            THEN CAST((strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) / 60 AS INTEGER)
+            ELSE 0
+        END,
+        is_late = CASE
+            WHEN NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;)
+                 AND (strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) &gt; 0
+            THEN 1
+            ELSE 0
+        END,
+        work_hours = CASE
+            WHEN NEW.check_out IS NOT NULL
+            THEN ROUND((strftime(&#x27;%s&#x27;, time(NEW.check_out)) - strftime(&#x27;%s&#x27;, time(NEW.check_in))) / 3600.0, 2)
+            ELSE NEW.work_hours
+        END
+    WHERE attendance_id = NEW.attendance_id;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 4B: Auto-Compute Late Minutes, Late Flag &amp; Work Hours AFTER UPDATE
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_compute_attendance_metrics_update
+AFTER UPDATE OF check_in, check_out, att_status ON Attendance
+FOR EACH ROW
+BEGIN
+    UPDATE Attendance
+    SET
+        late_minutes = CASE
+            WHEN NEW.check_in IS NOT NULL AND NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;)
+                 AND (strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) &gt; 0
+            THEN CAST((strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) / 60 AS INTEGER)
+            ELSE 0
+        END,
+        is_late = CASE
+            WHEN NEW.check_in IS NOT NULL AND NEW.att_status IN (&#x27;PRESENT&#x27;, &#x27;HALF_DAY&#x27;)
+                 AND (strftime(&#x27;%s&#x27;, time(NEW.check_in)) - strftime(&#x27;%s&#x27;, time(COALESCE(
+                     (SELECT ss.standard_check_in FROM Salary_Structure ss WHERE ss.emp_id = NEW.emp_id),
+                     &#x27;09:15:00&#x27;
+                 )))) &gt; 0
+            THEN 1
+            ELSE 0
+        END,
+        work_hours = CASE
+            WHEN NEW.check_in IS NOT NULL AND NEW.check_out IS NOT NULL
+            THEN ROUND((strftime(&#x27;%s&#x27;, time(NEW.check_out)) - strftime(&#x27;%s&#x27;, time(NEW.check_in))) / 3600.0, 2)
+            ELSE 0.00
+        END
+    WHERE attendance_id = NEW.attendance_id;
+END;
+
+-- ----------------------------------------------------------------------------
+-- Trigger 5: Salary Structure Guard (Rejects non-positive basic_pay)
+-- ----------------------------------------------------------------------------
+CREATE TRIGGER trg_validate_salary_positive_insert
+BEFORE INSERT ON Salary_Structure
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN NEW.basic_pay &lt;= 0 THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_SALARY]: basic_pay must be strictly greater than 0.&#x27;)
+        WHEN NEW.special_allowance &lt; 0 THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_SALARY]: special_allowance cannot be negative.&#x27;)
+    END;
+END;
+
+CREATE TRIGGER trg_validate_salary_positive_update
+BEFORE UPDATE ON Salary_Structure
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN NEW.basic_pay &lt;= 0 THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_SALARY]: basic_pay must be strictly greater than 0.&#x27;)
+        WHEN NEW.special_allowance &lt; 0 THEN
+            RAISE(ABORT, &#x27;TRIGGER_ERROR [INVALID_SALARY]: special_allowance cannot be negative.&#x27;)
+    END;
+END;
+
+
+-- ============================================================================
+-- SECTION 2: POSTGRESQL (PL/pgSQL) &amp; MYSQL 8.0 STORED FUNCTIONS &amp; PROCEDURES
+-- (Equivalent procedural definitions registered in SQLite via Python/SQL bridge)
+-- ============================================================================
+/*
+-------------------------------------------------------------------------------
+-- 2.1 Stored Function: fn_calculate_income_tax(p_annual_gross NUMERIC)
+-- Progressive Slab-Based Annual Income Tax &amp; Monthly TDS Calculation:
+--   - Standard Deduction: Rs. 75,000
+--   - 0 to 4,00,000       : 0%
+--   - 4,00,001 to 8,00,000: 5%
+--   - 8,00,001 to 12,00,000: 10%
+--   - 12,00,001 to 16,00,000: 15%
+--   - Above 16,00,000     : 20%
+--   - Plus 4% Health &amp; Education Cess; divided by 12 for monthly deduction.
+-------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION fn_calculate_income_tax(p_annual_gross NUMERIC)
+RETURNS NUMERIC(12, 2)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_taxable NUMERIC(12, 2);
+    v_annual_tax NUMERIC(12, 2) := 0;
+BEGIN
+    v_taxable := GREATEST(0, p_annual_gross - 75000.00);
+
+    IF v_taxable &lt;= 400000 THEN
+        v_annual_tax := 0;
+    ELSIF v_taxable &lt;= 800000 THEN
+        v_annual_tax := (v_taxable - 400000) * 0.05;
+    ELSIF v_taxable &lt;= 1200000 THEN
+        v_annual_tax := 20000 + (v_taxable - 800000) * 0.10;
+    ELSIF v_taxable &lt;= 1600000 THEN
+        v_annual_tax := 60000 + (v_taxable - 1200000) * 0.15;
+    ELSE
+        v_annual_tax := 120000 + (v_taxable - 1600000) * 0.20;
+    END IF;
+
+    -- Rebate under Section 87A if taxable income &lt;= 7,00,000
+    IF v_taxable &lt;= 700000 THEN
+        v_annual_tax := 0;
+    END IF;
+
+    -- Add 4% Health &amp; Education Cess and convert to monthly TDS
+    RETURN ROUND((v_annual_tax * 1.04) / 12.0, 2);
+END;
+$$;
+
+-------------------------------------------------------------------------------
+-- 2.2 Stored Procedure: sp_process_monthly_payroll(p_emp_id INT, p_month INT, p_year INT)
+-- Calculates attendance metrics, paid leaves, LOP days, late penalty (every 3
+-- late marks = 0.5 day LOP), prorated earnings, PF, PT, TDS, and Net Salary.
+-------------------------------------------------------------------------------
+CREATE OR REPLACE PROCEDURE sp_process_monthly_payroll(
+    p_emp_id INT,
+    p_month  INT,
+    p_year   INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_basic             NUMERIC(12,2);
+    v_hra_pct           NUMERIC(5,2);
+    v_da_pct            NUMERIC(5,2);
+    v_special           NUMERIC(12,2);
+    v_pf_pct            NUMERIC(5,2);
+    v_pt                NUMERIC(8,2);
+    v_working_days      INT;
+    v_present_days      NUMERIC(4,1);
+    v_paid_leave_days   NUMERIC(4,1);
+    v_unpaid_absences   NUMERIC(4,1);
+    v_late_count        INT;
+    v_late_penalty_days NUMERIC(4,1);
+    v_total_lop_days    NUMERIC(4,1);
+    v_full_gross        NUMERIC(12,2);
+    v_lop_deduction     NUMERIC(12,2);
+    v_pay_ratio         NUMERIC(8,4);
+    v_basic_earned      NUMERIC(12,2);
+    v_hra_earned        NUMERIC(12,2);
+    v_da_earned         NUMERIC(12,2);
+    v_special_earned    NUMERIC(12,2);
+    v_gross_earned      NUMERIC(12,2);
+    v_pf_deduction      NUMERIC(12,2);
+    v_tds_deduction     NUMERIC(12,2);
+    v_total_deductions  NUMERIC(12,2);
+    v_net_salary        NUMERIC(12,2);
+BEGIN
+    -- 1. Fetch Employee&#x27;s Salary Structure
+    SELECT basic_pay, hra_percent, da_percent, special_allowance, pf_percent, professional_tax
+      INTO v_basic, v_hra_pct, v_da_pct, v_special, v_pf_pct, v_pt
+      FROM Salary_Structure
+     WHERE emp_id = p_emp_id;
+
+    -- 2. Aggregate Monthly Attendance
+    SELECT COUNT(*),
+           COALESCE(SUM(CASE WHEN att_status = &#x27;PRESENT&#x27; THEN 1.0
+                             WHEN att_status = &#x27;HALF_DAY&#x27; THEN 0.5
+                             ELSE 0.0 END), 0.0),
+           COALESCE(SUM(CASE WHEN is_late = 1 THEN 1 ELSE 0 END), 0)
+      INTO v_working_days, v_present_days, v_late_count
+      FROM Attendance
+     WHERE emp_id = p_emp_id
+       AND EXTRACT(MONTH FROM att_date) = p_month
+       AND EXTRACT(YEAR FROM att_date)  = p_year;
+
+    -- 3. Count Paid Leave Days vs Unpaid Leave / Absent Days
+    SELECT COALESCE(SUM(
+        CASE WHEN a.att_status = &#x27;ON_LEAVE&#x27; AND EXISTS (
+            SELECT 1 FROM Leave_Request lr
+            JOIN Leave_Type lt ON lr.leave_type_id = lt.leave_type_id
+            WHERE lr.emp_id = a.emp_id
+              AND lr.status = &#x27;APPROVED&#x27;
+              AND lt.is_paid = 1
+              AND a.att_date BETWEEN lr.start_date AND lr.end_date
+        ) THEN 1.0 ELSE 0.0 END
+    ), 0.0)
+      INTO v_paid_leave_days
+      FROM Attendance a
+     WHERE a.emp_id = p_emp_id
+       AND EXTRACT(MONTH FROM a.att_date) = p_month
+       AND EXTRACT(YEAR FROM a.att_date)  = p_year;
+
+    -- 4. Compute Late Penalty (Every 3 late marks = 0.5 day LOP) &amp; Total LOP
+    v_late_penalty_days := FLOOR(v_late_count / 3) * 0.5;
+    v_unpaid_absences   := GREATEST(0.0, v_working_days - (v_present_days + v_paid_leave_days));
+    v_total_lop_days    := v_unpaid_absences + v_late_penalty_days;
+
+    -- 5. Compute Full Gross &amp; LOP Deduction
+    v_full_gross     := v_basic + (v_basic * v_hra_pct / 100.0) + (v_basic * v_da_pct / 100.0) + v_special;
+    v_lop_deduction  := ROUND((v_full_gross / v_working_days) * v_total_lop_days, 2);
+    v_pay_ratio      := GREATEST(0.0, (v_working_days - v_total_lop_days) / v_working_days);
+
+    v_basic_earned   := ROUND(v_basic * v_pay_ratio, 2);
+    v_hra_earned     := ROUND((v_basic * v_hra_pct / 100.0) * v_pay_ratio, 2);
+    v_da_earned      := ROUND((v_basic * v_da_pct / 100.0) * v_pay_ratio, 2);
+    v_special_earned := ROUND(v_special * v_pay_ratio, 2);
+    v_gross_earned   := ROUND(v_basic_earned + v_hra_earned + v_da_earned + v_special_earned, 2);
+
+    -- 6. Statutory Deductions (PF on earned basic, PT, TDS via fn_calculate_income_tax)
+    v_pf_deduction     := ROUND(v_basic_earned * (v_pf_pct / 100.0), 2);
+    v_tds_deduction    := fn_calculate_income_tax(v_gross_earned * 12.0);
+    v_total_deductions := ROUND(v_pf_deduction + v_pt + v_tds_deduction + v_lop_deduction, 2);
+    v_net_salary       := GREATEST(0.0, ROUND(v_full_gross - v_total_deductions, 2));
+
+    -- 7. Upsert into Payroll
+    INSERT INTO Payroll (
+        emp_id, pay_month, pay_year, working_days, present_days, paid_leave_days,
+        lop_days, late_count, late_penalty_days, basic_earned, hra_earned, da_earned,
+        special_allowance_earned, gross_salary, pf_deduction, professional_tax,
+        income_tax_deduction, lop_deduction, total_deductions, net_salary,
+        payment_status, processed_at
+    ) VALUES (
+        p_emp_id, p_month, p_year, v_working_days, v_present_days, v_paid_leave_days,
+        v_total_lop_days, v_late_count, v_late_penalty_days, v_basic_earned, v_hra_earned,
+        v_da_earned, v_special_earned, v_gross_earned, v_pf_deduction, v_pt,
+        v_tds_deduction, v_lop_deduction, v_total_deductions, v_net_salary,
+        &#x27;PROCESSED&#x27;, CURRENT_TIMESTAMP
+    )
+    ON CONFLICT (emp_id, pay_month, pay_year) DO UPDATE SET
+        working_days             = EXCLUDED.working_days,
+        present_days             = EXCLUDED.present_days,
+        paid_leave_days          = EXCLUDED.paid_leave_days,
+        lop_days                 = EXCLUDED.lop_days,
+        late_count               = EXCLUDED.late_count,
+        late_penalty_days        = EXCLUDED.late_penalty_days,
+        basic_earned             = EXCLUDED.basic_earned,
+        hra_earned               = EXCLUDED.hra_earned,
+        da_earned                = EXCLUDED.da_earned,
+        special_allowance_earned = EXCLUDED.special_allowance_earned,
+        gross_salary             = EXCLUDED.gross_salary,
+        pf_deduction             = EXCLUDED.pf_deduction,
+        professional_tax         = EXCLUDED.professional_tax,
+        income_tax_deduction     = EXCLUDED.income_tax_deduction,
+        lop_deduction            = EXCLUDED.lop_deduction,
+        total_deductions         = EXCLUDED.total_deductions,
+        net_salary               = EXCLUDED.net_salary,
+        payment_status           = &#x27;PROCESSED&#x27;,
+        processed_at             = CURRENT_TIMESTAMP;
+END;
+$$;
+*/
+</pre>
+
+  <h3>2.3 Sample Data Population (12 Employees Across 3 Months: Aug, Sep, Oct 2026)</h3>
+  <p>
+    I populated realistic data for <strong>12 employees across 4 departments</strong> over three complete months
+    (August, September, and October 2026), generating <strong>780 daily attendance records</strong>,
+    <strong>20 leave requests</strong> (covering approved paid leaves, approved unpaid LOP leaves, rejected leaves, and pending requests),
+    and <strong>36 monthly payroll records</strong> computed via <code>sp_process_bulk_payroll</code>.
+  </p>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss1_terminal_phase2_seed.png" alt="Phase 2 Terminal Output" />
+    <div class="fig-caption">Figure 2.1: Terminal execution trace verifying Phase 1–2 table row counts and October 2026 Monthly Attendance Summary.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- PHASE 3                                                              -->
+  <!-- ==================================================================== -->
+  <div class="page-break"></div>
+  <h2>Phase 3: Query &amp; Report Development + Index Optimization (20 Marks)</h2>
+  <p>
+    Using the Phase 2 dataset, I wrote SQL views and analytical queries for the three mandatory reports:
+    (1) Monthly Attendance Summary (<code>v_monthly_attendance_summary</code>),
+    (2) Itemized Employee Salary Slip (<code>v_employee_salary_slip</code>), and
+    (3) Late-Marks &amp; Punctuality Disciplinary Report (<code>v_late_marks_report</code>).
+    I then added composite B-Tree indexes on the filter and join columns and compared the <code>EXPLAIN QUERY PLAN</code> before and after indexing.
+  </p>
+
+  <h3>3.1 SQL Views &amp; Secondary Indexes (<code>sql/phase3_reports_and_indexes.sql</code>)</h3>
+  <pre>-- ============================================================================
+-- PHASE 3: QUERY &amp; REPORT DEVELOPMENT + INDEX OPTIMIZATION
+-- Uses the exact Phase 1 3NF Schema &amp; Phase 2 Data
+-- ============================================================================
+
+PRAGMA foreign_keys = ON;
+
+DROP VIEW IF EXISTS v_monthly_attendance_summary;
+DROP VIEW IF EXISTS v_employee_salary_slip;
+DROP VIEW IF EXISTS v_late_marks_report;
+
+-- ----------------------------------------------------------------------------
+-- REPORT 1: MONTHLY ATTENDANCE SUMMARY VIEW &amp; QUERY
+-- Aggregates attendance by employee and (year, month)
+-- ----------------------------------------------------------------------------
+CREATE VIEW v_monthly_attendance_summary AS
+SELECT
+    e.emp_id,
+    e.emp_code,
+    e.first_name || &#x27; &#x27; || e.last_name AS employee_name,
+    d.dept_name,
+    e.designation,
+    CAST(strftime(&#x27;%Y&#x27;, a.att_date) AS INTEGER) AS att_year,
+    CAST(strftime(&#x27;%m&#x27;, a.att_date) AS INTEGER) AS att_month,
+    strftime(&#x27;%Y-%m&#x27;, a.att_date)               AS period_label,
+    COUNT(a.attendance_id)                      AS total_working_days,
+    SUM(CASE WHEN a.att_status = &#x27;PRESENT&#x27;  THEN 1 ELSE 0 END) AS full_present_days,
+    SUM(CASE WHEN a.att_status = &#x27;HALF_DAY&#x27; THEN 1 ELSE 0 END) AS half_days,
+    SUM(CASE WHEN a.att_status = &#x27;ON_LEAVE&#x27; THEN 1 ELSE 0 END) AS on_leave_days,
+    SUM(CASE WHEN a.att_status = &#x27;ABSENT&#x27;   THEN 1 ELSE 0 END) AS absent_days,
+    ROUND(SUM(
+        CASE
+            WHEN a.att_status = &#x27;PRESENT&#x27;  THEN 1.0
+            WHEN a.att_status = &#x27;HALF_DAY&#x27; THEN 0.5
+            ELSE 0.0
+        END
+    ), 1) AS effective_present_days,
+    SUM(CASE WHEN a.is_late = 1 THEN 1 ELSE 0 END) AS late_marks_count,
+    ROUND(SUM(a.work_hours), 2) AS total_work_hours,
+    ROUND(AVG(CASE WHEN a.work_hours &gt; 0 THEN a.work_hours END), 2) AS avg_daily_hours,
+    ROUND(
+        (SUM(CASE WHEN a.att_status = &#x27;PRESENT&#x27; THEN 1.0
+                  WHEN a.att_status = &#x27;HALF_DAY&#x27; THEN 0.5
+                  WHEN a.att_status = &#x27;ON_LEAVE&#x27; THEN 1.0
+                  ELSE 0.0 END) * 100.0) / COUNT(a.attendance_id),
+        2
+    ) AS paid_attendance_pct
+FROM Employee e
+JOIN Department d ON e.dept_id = d.dept_id
+JOIN Attendance a ON e.emp_id = a.emp_id
+GROUP BY
+    e.emp_id, e.emp_code, e.first_name, e.last_name,
+    d.dept_name, e.designation,
+    strftime(&#x27;%Y&#x27;, a.att_date), strftime(&#x27;%m&#x27;, a.att_date);
+
+
+-- ----------------------------------------------------------------------------
+-- REPORT 2: ITEMIZED EMPLOYEE SALARY SLIP VIEW &amp; QUERY
+-- Joins Employee, Department, Salary_Structure, and Payroll
+-- ----------------------------------------------------------------------------
+CREATE VIEW v_employee_salary_slip AS
+SELECT
+    p.payroll_id,
+    p.pay_month,
+    p.pay_year,
+    printf(&#x27;%04d-%02d&#x27;, p.pay_year, p.pay_month) AS pay_period,
+    e.emp_id,
+    e.emp_code,
+    e.first_name || &#x27; &#x27; || e.last_name AS employee_name,
+    e.email,
+    e.designation,
+    e.hire_date,
+    d.dept_code,
+    d.dept_name,
+    d.base_location,
+    -- Standard Contractual Structure
+    ss.basic_pay AS contracted_basic,
+    ROUND(ss.basic_pay * ss.hra_percent / 100.0, 2) AS contracted_hra,
+    ROUND(ss.basic_pay * ss.da_percent / 100.0, 2)  AS contracted_da,
+    ss.special_allowance AS contracted_special_allowance,
+    ROUND(
+        ss.basic_pay
+        + (ss.basic_pay * ss.hra_percent / 100.0)
+        + (ss.basic_pay * ss.da_percent / 100.0)
+        + ss.special_allowance,
+        2
+    ) AS contracted_gross,
+    -- Monthly Attendance &amp; Leave Summary on Slip
+    p.working_days,
+    p.present_days,
+    p.paid_leave_days,
+    p.lop_days,
+    p.late_count,
+    p.late_penalty_days,
+    -- Earned Components
+    p.basic_earned,
+    p.hra_earned,
+    p.da_earned,
+    p.special_allowance_earned,
+    p.gross_salary,
+    -- Statutory &amp; Attendance Deductions
+    p.pf_deduction,
+    p.professional_tax,
+    p.income_tax_deduction,
+    p.lop_deduction,
+    p.total_deductions,
+    p.net_salary,
+    p.payment_status,
+    p.processed_at
+FROM Payroll p
+JOIN Employee e          ON p.emp_id = e.emp_id
+JOIN Department d        ON e.dept_id = d.dept_id
+JOIN Salary_Structure ss ON e.emp_id = ss.emp_id;
+
+
+-- ----------------------------------------------------------------------------
+-- REPORT 3: LATE-MARKS &amp; PUNCTUALITY DISCIPLINARY REPORT VIEW &amp; QUERY
+-- Tracks late check-ins (after standard_check_in 09:15:00), total late minutes,
+-- and LOP penalty conversion (every 3 late marks = 0.5 day LOP deduction).
+-- ----------------------------------------------------------------------------
+CREATE VIEW v_late_marks_report AS
+SELECT
+    e.emp_id,
+    e.emp_code,
+    e.first_name || &#x27; &#x27; || e.last_name AS employee_name,
+    d.dept_name,
+    e.designation,
+    ss.standard_check_in,
+    CAST(strftime(&#x27;%Y&#x27;, a.att_date) AS INTEGER) AS att_year,
+    CAST(strftime(&#x27;%m&#x27;, a.att_date) AS INTEGER) AS att_month,
+    strftime(&#x27;%Y-%m&#x27;, a.att_date)               AS period_label,
+    COUNT(CASE WHEN a.is_late = 1 THEN 1 END)   AS late_days_count,
+    COALESCE(SUM(a.late_minutes), 0)            AS total_late_minutes,
+    COALESCE(ROUND(AVG(CASE WHEN a.is_late = 1 THEN a.late_minutes END), 1), 0.0) AS avg_late_minutes_when_late,
+    COALESCE(MAX(a.late_minutes), 0)            AS max_late_minutes,
+    MAX(CASE WHEN a.is_late = 1 THEN a.check_in END) AS latest_check_in_time,
+    ROUND((CAST(COUNT(CASE WHEN a.is_late = 1 THEN 1 END) / 3 AS INTEGER)) * 0.5, 1) AS penalty_lop_days,
+    CASE
+        WHEN COUNT(CASE WHEN a.is_late = 1 THEN 1 END) = 0 THEN &#x27;EXCELLENT (0 Late)&#x27;
+        WHEN COUNT(CASE WHEN a.is_late = 1 THEN 1 END) &lt;= 2 THEN &#x27;WARNING (1-2 Late)&#x27;
+        ELSE &#x27;PENALTY APPLIED (3+ Late -&gt; LOP)&#x27;
+    END AS punctuality_status
+FROM Employee e
+JOIN Department d        ON e.dept_id = d.dept_id
+JOIN Salary_Structure ss ON e.emp_id = ss.emp_id
+JOIN Attendance a        ON e.emp_id = a.emp_id
+GROUP BY
+    e.emp_id, e.emp_code, e.first_name, e.last_name,
+    d.dept_name, e.designation, ss.standard_check_in,
+    strftime(&#x27;%Y&#x27;, a.att_date), strftime(&#x27;%m&#x27;, a.att_date);
+
+
+-- ============================================================================
+-- SECTION 2: PERFORMANCE INDEXES FOR PHASE 3 REPORTS
+-- ============================================================================
+
+-- Composite covering index for Attendance reports (Monthly Attendance &amp; Late-Marks)
+CREATE INDEX IF NOT EXISTS idx_attendance_emp_date_late
+    ON Attendance (emp_id, att_date, is_late, att_status, late_minutes, work_hours);
+
+-- Equality-first + date-range composite covering index for Late-Marks Report scans
+CREATE INDEX IF NOT EXISTS idx_attendance_date_late_emp
+    ON Attendance (is_late, att_date, emp_id, late_minutes, check_in);
+
+-- Composite index for Payroll period &amp; employee lookups (Salary Slip Report)
+CREATE INDEX IF NOT EXISTS idx_payroll_period_emp
+    ON Payroll (pay_year, pay_month, emp_id);
+
+-- Composite index for Leave overlap validation trigger &amp; report lookups
+CREATE INDEX IF NOT EXISTS idx_leave_emp_status_dates
+    ON Leave_Request (emp_id, status, start_date, end_date);
+</pre>
+
+  <h3>3.2 Query Execution Plan Comparison (Before vs. After Indexing)</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:22%;">Report Query</th>
+        <th style="width:32%;">BEFORE Adding Secondary Indexes</th>
+        <th style="width:32%;">AFTER Adding Secondary Indexes</th>
+        <th style="width:14%;">Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Report 3: Late-Marks Report</strong><br/><code>WHERE a.att_date BETWEEN '2026-10-01' AND '2026-10-31' AND a.is_late = 1</code></td>
+        <td><code>SCAN e USING INDEX sqlite_autoindex_Employee_1</code> &rarr; <code>SEARCH a USING INDEX sqlite_autoindex_Attendance_1</code> (Scans every employee and reads table heap pages for <code>is_late</code> &amp; <code>late_minutes</code>)</td>
+        <td><code>SEARCH a USING COVERING INDEX idx_attendance_date_late_emp (is_late=? AND att_date&gt;? AND att_date&lt;?)</code> &rarr; <code>SEARCH e USING INTEGER PRIMARY KEY</code></td>
+        <td><strong>Index-only covering scan; 27.1% faster</strong> (12.01 ms &rarr; 8.76 ms for 300 runs)</td>
+      </tr>
+      <tr>
+        <td><strong>Report 2: Monthly Salary Slip Batch</strong><br/><code>WHERE p.pay_year = 2026 AND p.pay_month = 10 ORDER BY p.emp_id</code></td>
+        <td><code>SCAN p USING INDEX sqlite_autoindex_Payroll_1</code> (Full scan across all payroll months because <code>emp_id</code> is the leading column of the unique constraint)</td>
+        <td><code>SEARCH p USING INDEX idx_payroll_period_emp (pay_year=? AND pay_month=?)</code> (Direct B-Tree range seek on period in sorted <code>emp_id</code> order)</td>
+        <td><strong>Eliminates full table scan (<code>SCAN p</code>)</strong> completely</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss2_terminal_phase3_explain.png" alt="Phase 3 Reports and EXPLAIN Plan" />
+    <div class="fig-caption">Figure 3.1: Terminal execution output showing Report 2 (Salary Slips), Report 3 (Late-Marks), and Before/After EXPLAIN QUERY PLAN.</div>
+  </div>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/fig2_explain_benchmark.png" alt="Phase 3 Benchmark Chart" style="max-width:78%;" />
+    <div class="fig-caption">Figure 3.2: Empirical latency comparison across 300 query executions before and after adding composite indexes.</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- PHASE 4                                                              -->
+  <!-- ==================================================================== -->
+  <div class="page-break"></div>
+  <h2>Phase 4: Security, Access Control (RBAC), Transactions &amp; Testing (20 Marks)</h2>
+  <p>
+    In Phase 4, I implemented Role-Based Access Control (RBAC) separating <code>HR_ADMIN</code> (full administrative CRUD and
+    report access) from <code>EMPLOYEE</code> (strictly read-only access to their own attendance and salary records, plus
+    submitting their own leave requests). All salary structure updates, attendance logs, leave approvals, and payroll calculations
+    are wrapped in explicit atomic database transactions using <code>SAVEPOINT</code>, <code>COMMIT</code>, and <code>ROLLBACK</code>.
+  </p>
+
+  <h3>4.1 RBAC &amp; Transactional SQL Specification (<code>sql/phase4_rbac_and_transactions.sql</code>)</h3>
+  <pre>-- ============================================================================
+-- PHASE 4: SECURITY, ROLE-BASED ACCESS CONTROL (RBAC) &amp; TRANSACTION MANAGEMENT
+-- Uses the exact Phase 1–3 Schema &amp; Views
+-- ============================================================================
+
+/*
+===============================================================================
+SECTION 1: POSTGRESQL / MYSQL 8.0 NATIVE RBAC (GRANT, REVOKE &amp; RLS POLICIES)
+===============================================================================
+
+-- 1. Create Database Roles
+CREATE ROLE role_hr_admin NOLOGIN;
+CREATE ROLE role_employee NOLOGIN;
+
+-- 2. HR / Admin Role: Full Privileges across all 7 tables and views
+GRANT SELECT, INSERT, UPDATE, DELETE ON Department       TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Employee         TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Salary_Structure TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Leave_Type       TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Leave_Request    TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Attendance       TO role_hr_admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON Payroll          TO role_hr_admin;
+GRANT SELECT ON v_monthly_attendance_summary, v_employee_salary_slip, v_late_marks_report TO role_hr_admin;
+
+-- 3. Employee Role: Strictly Read-Only on Own Records (+ Submit Own Leave Request)
+REVOKE ALL PRIVILEGES ON Department, Employee, Salary_Structure, Leave_Type, Leave_Request, Attendance, Payroll FROM role_employee;
+
+GRANT SELECT ON Department, Leave_Type TO role_employee;
+GRANT SELECT ON Employee, Salary_Structure, Attendance, Payroll, Leave_Request TO role_employee;
+GRANT INSERT (emp_id, leave_type_id, start_date, end_date, reason) ON Leave_Request TO role_employee;
+
+-- 4. Row-Level Security (RLS) in PostgreSQL so Employee can ONLY see own rows
+ALTER TABLE Employee         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Salary_Structure ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Attendance       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Leave_Request    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE Payroll          ENABLE ROW LEVEL SECURITY;
+
+-- HR Admin bypasses RLS (full access)
+CREATE POLICY hr_admin_all_access ON Payroll
+    TO role_hr_admin USING (true) WITH CHECK (true);
+
+-- Employee can only SELECT rows matching their authenticated session emp_id
+CREATE POLICY emp_self_read_payroll ON Payroll
+    FOR SELECT TO role_employee
+    USING (emp_id = current_setting(&#x27;app.current_emp_id&#x27;)::INTEGER);
+
+CREATE POLICY emp_self_read_attendance ON Attendance
+    FOR SELECT TO role_employee
+    USING (emp_id = current_setting(&#x27;app.current_emp_id&#x27;)::INTEGER);
+
+CREATE POLICY emp_self_read_salary ON Salary_Structure
+    FOR SELECT TO role_employee
+    USING (emp_id = current_setting(&#x27;app.current_emp_id&#x27;)::INTEGER);
+
+CREATE POLICY emp_self_leave_access ON Leave_Request
+    FOR ALL TO role_employee
+    USING (emp_id = current_setting(&#x27;app.current_emp_id&#x27;)::INTEGER)
+    WITH CHECK (emp_id = current_setting(&#x27;app.current_emp_id&#x27;)::INTEGER);
+*/
+
+-- ============================================================================
+-- SECTION 2: TRANSACTIONAL SALARY &amp; PAYROLL UPDATE PATTERNS (COMMIT / ROLLBACK)
+-- ============================================================================
+
+/*
+-- Pattern A: Atomic Salary Revision &amp; Payroll Recalculation (COMMIT on success)
+BEGIN TRANSACTION;
+
+SAVEPOINT sp_before_salary_revision;
+
+UPDATE Salary_Structure
+   SET basic_pay         = 95000.00,
+       special_allowance = 18000.00,
+       effective_from    = &#x27;2026-10-01&#x27;
+ WHERE emp_id = 3;
+
+-- Re-compute October 2026 payroll inside the same transaction
+CALL sp_process_monthly_payroll(3, 10, 2026);
+
+-- Verify net_salary integrity before committing
+COMMIT;
+
+
+-- Pattern B: Automatic ROLLBACK when a constraint or trigger fails mid-transaction
+BEGIN TRANSACTION;
+
+UPDATE Salary_Structure
+   SET basic_pay = -15000.00   -- Violates CHECK (basic_pay &gt; 0) &amp; trg_validate_salary_positive_update
+ WHERE emp_id = 3;
+
+-- Database raises ABORT/ERROR; transaction rolls back completely so Salary_Structure
+-- and Payroll remain untouched.
+ROLLBACK;
+*/
+</pre>
+
+  <h3>4.2 Comprehensive Test Suite Documentation (Valid, Boundary, Invalid, ACID &amp; RBAC)</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:6%;">ID</th>
+        <th style="width:14%;">Category</th>
+        <th style="width:32%;">Test Case Scenario</th>
+        <th style="width:39%;">Observed Database / RBAC Output</th>
+        <th style="width:9%;">Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>T01</code></td><td>VALID</td><td>Record on-time attendance (<code>09:00</code> to <code>18:00</code>)</td><td>Accepted; trigger auto-computed <code>work_hours=9h, is_late=0, late_minutes=0</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T02</code></td><td>BOUNDARY</td><td>Check-in at exact grace threshold <code>09:15:00</code></td><td>Accepted as on-time: <code>is_late=0, late_minutes=0</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T03</code></td><td>BOUNDARY</td><td>Check-in 1 min past threshold (<code>09:16:00</code>)</td><td>Flagged as late by trigger: <code>is_late=1, late_minutes=1</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T04</code></td><td>INVALID</td><td>Duplicate attendance for <code>(emp_id=3, '2026-10-01')</code></td><td>Rejected &amp; rolled back: <code>UNIQUE constraint failed: Attendance.emp_id, Attendance.att_date</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T05</code></td><td>INVALID</td><td>Attendance with <code>check_out (09:30) &lt; check_in (14:00)</code></td><td>Rejected by trigger: <code>TRIGGER_ERROR [INVALID_CHECK_OUT]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T06</code></td><td>INVALID</td><td>Mark <code>PRESENT</code> on approved leave date (<code>2026-08-10</code>)</td><td>Rejected by trigger: <code>TRIGGER_ERROR [ATTENDANCE_ON_APPROVED_LEAVE]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T07</code></td><td>INVALID</td><td>Submit leave (<code>2026-10-09..12</code>) overlapping approved leave</td><td>Rejected by trigger: <code>TRIGGER_ERROR [LEAVE_OVERLAP]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T08</code></td><td>BOUNDARY</td><td>1-day leave (<code>2026-10-07..07</code>) adjacent to approved leave</td><td>Accepted without false-positive overlap (<code>leave_id=21</code>)</td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T09</code></td><td>INVALID</td><td>Leave with <code>end_date ('2026-12-05') &lt; start_date ('2026-12-10')</code></td><td>Rejected by trigger: <code>TRIGGER_ERROR [LEAVE_DATE_ORDER]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T10</code></td><td>INVALID</td><td>Submit 15-day Sick Leave exceeding 10-day annual quota</td><td>Rejected by trigger: <code>TRIGGER_ERROR [LEAVE_QUOTA_EXCEEDED]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T11</code></td><td>INVALID</td><td>Set negative basic salary (<code>basic_pay = -25000.00</code>)</td><td>Rejected &amp; rolled back: <code>TRIGGER_ERROR [INVALID_SALARY]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T12</code></td><td>BOUNDARY</td><td>Set zero basic salary (<code>basic_pay = 0.00</code>)</td><td>Rejected at 0 boundary: <code>TRIGGER_ERROR [INVALID_SALARY]</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T13</code></td><td>ACID ROLLBACK</td><td>Atomic Salary Update + Payroll Run failing at Step 2 (<code>month=13</code>)</td><td>Full <code>ROLLBACK</code> verified; <code>basic_pay</code> remained unchanged at ₹1,15,000.00</td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T14</code></td><td>RBAC SECURITY</td><td><code>EMPLOYEE</code> (<code>EMP003</code>) attempts to view <code>EMP001</code> Salary Slip</td><td>Blocked with <code>PermissionDeniedError (RBAC_ACCESS_DENIED)</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T15</code></td><td>RBAC SECURITY</td><td><code>EMPLOYEE</code> (<code>EMP003</code>) attempts to update salary / run payroll</td><td>Blocked with <code>PermissionDeniedError (Requires role='HR_ADMIN')</code></td><td class="pass-badge">PASS</td></tr>
+      <tr><td><code>T16</code></td><td>VALID COMMIT</td><td><code>HR_ADMIN</code> executes atomic Salary Revision + Payroll Recalc</td><td><code>COMMIT</code> succeeded; updated <code>EMP004</code> salary &amp; recomputed Net Pay ₹1,27,942.93</td><td class="pass-badge">PASS</td></tr>
+    </tbody>
+  </table>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss3_terminal_phase4_tests.png" alt="Phase 4 Test Suite Terminal Output" />
+    <div class="fig-caption">Figure 4.1: Terminal execution of tests/run_phase4_tests.py showing all 16 test cases passing (16/16 PASSED).</div>
+  </div>
+
+  <!-- ==================================================================== -->
+  <!-- PHASE 5                                                              -->
+  <!-- ==================================================================== -->
+  <div class="page-break"></div>
+  <h2>Phase 5: Integration, Role-Based Web UI &amp; Real-World Scaling (20 Marks)</h2>
+  <p>
+    In Phase 5, I built a role-based Flask web application (<code>app.py</code> and <code>templates/index.html</code>) connected
+    directly to the Phase 1–4 SQLite database and procedural backend. Below are the screenshots captured from the running web interface
+    demonstrating both the <code>HR_ADMIN</code> portal and the restricted <code>EMPLOYEE</code> self-service portal.
+  </p>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss4_ui_hr_admin_overview.png" alt="HR Admin Overview UI" />
+    <div class="fig-caption">Figure 5.1: HR_ADMIN Dashboard (EMP001 Aarav Mehta) showing KPI cards, Atomic Salary Revision Transaction commit, Employee Onboarding, and the 12-Employee 3NF Directory.</div>
+  </div>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss5_ui_salary_slip_report.png" alt="Salary Slip UI" />
+    <div class="fig-caption">Figure 5.2: Phase 2 Bulk Payroll Runner (sp_process_bulk_payroll) and Phase 3 Printable Itemized Employee Salary Slip (Report 2).</div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss6_ui_late_marks_report.png" alt="Late Marks Report UI" />
+    <div class="fig-caption">Figure 5.3: Phase 3 Late-Marks &amp; Punctuality Disciplinary Report (Report 3) showing late arrivals past 09:15:00 and automatic LOP penalty conversion.</div>
+  </div>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss7_ui_triggers_console.png" alt="Triggers Console UI" />
+    <div class="fig-caption">Figure 5.4: Phase 2 &amp; 4 Attendance and Leave Console showing live trigger rejection of overlapping leave dates (TRIGGER_ERROR [LEAVE_OVERLAP]) and automatic computation of late minutes and work hours.</div>
+  </div>
+
+  <div class="fig-box">
+    <img src="file:///Users/harshwardhan/.gemini/antigravity/scratch/payroll_attendance_system/docs/report_assets_harshwardhan/ss8_ui_employee_rbac.png" alt="Employee RBAC View UI" />
+    <div class="fig-caption">Figure 5.5: EMPLOYEE Self-Service View (logged in as EMP003 Rohan Verma) showing Row-Level Security isolation (only 1 visible employee) and live HTTP 403 RBAC_FORBIDDEN rejection when attempting to access EMP001's salary slip.</div>
+  </div>
+
+  <h3>5.1 Real-World Use Cases &amp; Scaling to a Large Firm (10,000 to 100,000+ Employees)</h3>
+  <p>
+    While our 3NF relational schema handles 12 employees and 3 months of attendance in single-digit milliseconds locally,
+    deploying this exact schema for a large enterprise with 50,000+ employees (~1.3 million attendance rows per month) benefits from
+    four production architectural extensions that require zero breaking changes to the Phase 1 table structure:
+  </p>
+  <ol>
+    <li><strong>Monthly Range Partitioning on <code>Attendance</code> and <code>Payroll</code>:</strong> By partitioning <code>Attendance</code> by <code>RANGE (att_date)</code> and <code>Payroll</code> by <code>RANGE (pay_year, pay_month)</code> in PostgreSQL, monthly payroll calculation and report queries scan only the current month's partition instead of multi-year historical data.</li>
+    <li><strong>Biometric &amp; RFID Turnstile Message Queue:</strong> During the 09:00–09:15 AM check-in peak, thousands of concurrent biometric punches can be buffered via Kafka/RabbitMQ and committed in batched transactions so row locks never block interactive users.</li>
+    <li><strong>Read Replicas for Employee Self-Service Payslip Downloads:</strong> On payday, over 95% of database traffic consists of read-only <code>SELECT</code> queries against <code>v_employee_salary_slip</code> from <code>role_employee</code> sessions. Routing employee reads to read replicas keeps the primary database dedicated to HR transactional writes.</li>
+    <li><strong>Immutable Audit Trail &amp; Effective-Dated Salary Revisions:</strong> Extending <code>Salary_Structure</code> with an archive log table allows retrospective arrears computation when promotions are back-dated across previous payroll months.</li>
+  </ol>
+
+</body>
+</html>
